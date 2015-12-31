@@ -9,11 +9,11 @@ load "token.rb"
 #   exit 130
 # end
 
+Start_Text = "I can exchange $, €, ₽ currencies. Ask me '$4' for example. Or '100 ₽'."
+
 uri = URI.parse("https://openexchangerates.org/api/latest.json?app_id=#{OXR_APP_ID}")
 base_usd = Net::HTTP.get_response(uri)
 @base_usd_json = JSON.parse base_usd.body
-
-Start_Text = "I can exchange $, €, ₽ currencies. Ask me '$4' for example. Or '100 ₽'."
 
 def detect_currency value
   case value
@@ -30,13 +30,17 @@ end
 
 def convert hash
   # puts hash
+  currency = detect_currency hash[:currency]
+  change_currency = currency == :USD || currency == :EUR ? :RUB : :USD
+
   amount = (hash[:amount]).to_f
   usdrub_rate = (@base_usd_json['rates']['RUB']).to_f
+  usdeur_rate = (@base_usd_json['rates']['EUR']).to_f
 
-  currency = detect_currency hash[:currency]
-  change_currency = currency == :RUB ? :USD : :RUB
+  rate = usdrub_rate
+  rate = usdrub_rate / usdeur_rate if currency == :EUR
 
-  result = change_currency == :RUB ? (amount * usdrub_rate) : (amount / usdrub_rate)
+  result = change_currency == :RUB ? (amount * rate) : (amount / rate)
 
   "#{result.round(2)} #{change_currency}"
 end
