@@ -9,6 +9,8 @@ load "token.rb"
 
 @base_rub_json
 
+Start_Text = "I can exchange $, €, ₽ currencies. Ask me '$4' for example. Or '100 ₽'."
+
 def detect_currency value
   case value
   when '$'
@@ -54,9 +56,11 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
       hash = {amount: amount, currency: currency}
       bot.api.send_message(chat_id: message.chat.id, text: "#{convert hash} ")
     when '/start'
-      bot.api.send_message(chat_id: message.chat.id, text: "Hello, #{message.from.first_name}. Ask me '$4'.")
+      bot.api.send_message(chat_id: message.chat.id, text: "Hello, #{message.from.first_name}. #{Start_Text}")
     when '/stop'
       bot.api.send_message(chat_id: message.chat.id, text: "Bye, #{message.from.first_name}")
+    else
+      bot.api.send_message(chat_id: message.chat.id, text: "Not sure. #{Start_Text}")
     end
   end
 end
