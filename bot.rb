@@ -31,12 +31,12 @@ end
 def convert hash
   # puts hash
   amount = (hash[:amount]).to_f
-  usd_rub_rate = (@base_usd_json['rates']['RUB']).to_f
+  usdrub_rate = (@base_usd_json['rates']['RUB']).to_f
 
   currency = detect_currency hash[:currency]
   change_currency = currency == :RUB ? :USD : :RUB
 
-  result = change_currency == :RUB ? (amount * usd_rub_rate) : (amount / usd_rub_rate)
+  result = change_currency == :RUB ? (amount * usdrub_rate) : (amount / usdrub_rate)
 
   "#{result.round(2)} #{change_currency}"
 end
