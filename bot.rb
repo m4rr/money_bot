@@ -1,3 +1,5 @@
+require "net/http"
+require "uri"
 require 'telegram/bot'
 
 load "token.rb"
@@ -7,7 +9,9 @@ load "token.rb"
 #   exit 130
 # end
 
-@base_rub_json
+uri = URI.parse("https://openexchangerates.org/api/latest.json?app_id=#{OXR_APP_ID}")
+base_usd = Net::HTTP.get_response(uri)
+@base_usd_json = JSON.parse base_usd.body
 
 Start_Text = "I can exchange $, €, ₽ currencies. Ask me '$4' for example. Or '100 ₽'."
 
@@ -19,34 +23,22 @@ def detect_currency value
     :EUR
   when '₽'
     :RUB
+  else
+    :USD
   end
 end
 
 def convert hash
-  amount = hash[:amount]
+  # puts hash
+  amount = (hash[:amount]).to_f
+  usd_rub_rate = (@base_usd_json['rates']['RUB']).to_f
+
   currency = detect_currency hash[:currency]
+  change_currency = currency == :RUB ? :USD : :RUB
 
-  if @base_rub_json.nil?
-    response = Net::HTTP.get_response('api.fixer.io', '/latest?base=RUB')
-    @base_rub_json = JSON.parse response.body
-  end
+  result = change_currency == :RUB ? (amount * usd_rub_rate) : (amount / usd_rub_rate)
 
-  if currency == :RUB
-    to_cur = :USD
-  elsif currency == :USD || currency == :EUR || currency.nil?
-    to_cur = :RUB
-  end
-
-  val = @base_rub_json['rates'][:USD.to_s] if currency == :USD || currency == :RUB || currency.nil?
-  val = @base_rub_json['rates'][:EUR.to_s] if currency == :EUR
-
-  if currency == :RUB
-    result = (amount.to_f * val.to_f).round(2)
-  else
-    result = (amount.to_f / val.to_f).round(2)
-  end
-
-  "#{result} of #{to_cur}"
+  "#{result.round(2)} #{change_currency}"
 end
 
 Telegram::Bot::Client.run(TOKEN) do |bot|
@@ -57,11 +49,8 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
     when '/stop'
       bot.api.send_message(chat_id: message.chat.id, text: "Bye, #{message.from.first_name}")
     when /([$€₽])?\s*([\d.]+)\s*([$€₽])?/
-      amount = $2
-      currency = [$1, $3].compact.first
-      hash = {amount: amount, currency: currency}
-      puts hash
-      bot.api.send_message(chat_id: message.chat.id, text: "#{convert hash} ")
+      hash = {amount: $2, currency: [$1, $3].compact.first}
+      bot.api.send_message(chat_id: message.chat.id, text: "#{convert hash}")
     else
       bot.api.send_message(chat_id: message.chat.id, text: "Not sure. #{Start_Text}")
     end
