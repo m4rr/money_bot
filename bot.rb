@@ -52,16 +52,16 @@ end
 Telegram::Bot::Client.run(TOKEN) do |bot|
   bot.listen do |message|
     case message.text
+    when '/start'
+      bot.api.send_message(chat_id: message.chat.id, text: "Hello, #{message.from.first_name}. #{Start_Text}")
+    when '/stop'
+      bot.api.send_message(chat_id: message.chat.id, text: "Bye, #{message.from.first_name}")
     when /([$€₽])?\s*([\d.]+)\s*([$€₽])?/
       amount = $2
       currency = [$1, $3].compact.first
       hash = {amount: amount, currency: currency}
       puts hash
       bot.api.send_message(chat_id: message.chat.id, text: "#{convert hash} ")
-    when '/start'
-      bot.api.send_message(chat_id: message.chat.id, text: "Hello, #{message.from.first_name}. #{Start_Text}")
-    when '/stop'
-      bot.api.send_message(chat_id: message.chat.id, text: "Bye, #{message.from.first_name}")
     else
       bot.api.send_message(chat_id: message.chat.id, text: "Not sure. #{Start_Text}")
     end
