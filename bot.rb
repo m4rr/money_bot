@@ -33,11 +33,11 @@ def convert hash
 
   if currency == :RUB
     to_cur = :USD
-  elsif currency == :USD || currency == :EUR
+  elsif currency == :USD || currency == :EUR || currency.nil?
     to_cur = :RUB
   end
 
-  val = @base_rub_json['rates'][:USD.to_s] if currency == :USD || currency == :RUB
+  val = @base_rub_json['rates'][:USD.to_s] if currency == :USD || currency == :RUB || currency.nil?
   val = @base_rub_json['rates'][:EUR.to_s] if currency == :EUR
 
   if currency == :RUB
