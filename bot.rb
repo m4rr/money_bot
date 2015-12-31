@@ -56,6 +56,7 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
       amount = $2
       currency = [$1, $3].compact.first
       hash = {amount: amount, currency: currency}
+      puts hash
       bot.api.send_message(chat_id: message.chat.id, text: "#{convert hash} ")
     when '/start'
       bot.api.send_message(chat_id: message.chat.id, text: "Hello, #{message.from.first_name}. #{Start_Text}")
