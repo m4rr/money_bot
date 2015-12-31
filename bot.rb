@@ -52,7 +52,7 @@ end
 Telegram::Bot::Client.run(TOKEN) do |bot|
   bot.listen do |message|
     case message.text
-    when /([$€₽])?\s*(\d+)\s*([$€₽])?/
+    when /([$€₽])?\s*([\d.]+)\s*([$€₽])?/
       amount = $2
       currency = [$1, $3].compact.first
       hash = {amount: amount, currency: currency}
