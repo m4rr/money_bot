@@ -29,12 +29,11 @@ end
 Telegram::Bot::Client.run(TOKEN) do |bot|
   bot.listen do |message|
     case message.text
-    when /(?:([$€₽])?\s*(\d+)?)|(?:(\d+)\s*([$€₽])?)/
-      got_it = [$1, $2, $3]
-      puts got_it.to_s
-      # hash = parse_values got_it
-      # puts hash
-      bot.api.send_message(chat_id: message.chat.id, text: "got it #{hash}")
+    when /([$€₽])?\s*(\d+)\s*([$€₽])?/
+      amount = $2
+      currency = [$1, $3].compact.first
+      hash = {amount: amount, currency: currency}
+      bot.api.send_message(chat_id: message.chat.id, text: "got it #{hash.to_s}")
     when '/start'
       bot.api.send_message(chat_id: message.chat.id, text: "Hello, #{message.from.first_name}")
     when '/stop'
