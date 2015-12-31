@@ -10,5 +10,6 @@ Telegram chat bot like
 ```sh
 $ bundle
 $ echo "TOKEN = 'YOUR_TOKEN'" >> token.rb
+$ echo "OXR_APP_ID = 'Open Exchange Rates token'" >> token.rb
 $ bundle exec ruby bot.rb
 ```
