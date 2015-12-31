@@ -41,10 +41,12 @@ def convert hash
   val = @base_rub_json['rates'][:EUR.to_s] if currency == :EUR
 
   if currency == :RUB
-    "#{amount.to_f * val.to_f} of #{to_cur}"
+    result = (amount.to_f * val.to_f).round(2)
   else
-    "#{amount.to_f / val.to_f} of #{to_cur}"
+    result = (amount.to_f / val.to_f).round(2)
   end
+
+  "#{result} of #{to_cur}"
 end
 
 Telegram::Bot::Client.run(TOKEN) do |bot|
