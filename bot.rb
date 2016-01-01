@@ -15,10 +15,12 @@ Start_Text = "I can exchange $, €, ₽ currencies. Ask me '$4' for example. Or
 
 def base_usd_json
   time_diff = Time.now.to_i - @last_checked.to_i
-  if time_diff > 60 * 30 || time_diff < 60 * 1
+  #  time_diff is now or more than 30 mins
+  if time_diff <= 1 || time_diff > 60 * 30
     uri = URI.parse("https://openexchangerates.org/api/latest.json?app_id=#{OXR_APP_ID}")
     base_usd = Net::HTTP.get_response(uri)
     @base_usd_json_store = JSON.parse base_usd.body
+    @last_checked = Time.now
   end
   @base_usd_json_store
 end
