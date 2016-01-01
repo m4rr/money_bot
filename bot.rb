@@ -9,7 +9,7 @@ load "token.rb"
 #   exit 130
 # end
 
-Start_Text = "I can exchange $, €, ₽ currencies. Ask me '$4' for example. Or '100 ₽'."
+Start_Text = "I convert $, €, ₽ currencies based on Open Exchange Rates. Ask me '$4' for example. Or '100 ₽'."
 
 @last_checked = Time.now
 
