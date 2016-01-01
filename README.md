@@ -16,7 +16,7 @@ $ bundle exec ruby bot.rb
 
 # Starting
 ```sh
-$ bundle exec ruby bot.rb      # foreground execution with stdout
+$ bundle exec ruby bot.rb            # foreground execution with stdout
 # OR
-$ bundle exec ruby bot.rb &    # background execution
+$ nohup bundle exec ruby bot.rb &    # background execution
 ```
