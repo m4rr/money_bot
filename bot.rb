@@ -11,12 +11,9 @@ load "token.rb"
 
 Start_Text = "I convert $, €, ₽ currencies based on Open Exchange Rates. Ask me '$4' for example. Or '100 ₽'."
 
-@last_checked = Time.now
 
 def base_usd_json
-  time_diff = Time.now.to_i - @last_checked.to_i
-  #  time_diff is now or more than 30 mins
-  if time_diff <= 1 || time_diff > 60 * 30
+  if @last_checked.nil? || Time.now.to_i - @last_checked.to_i > 60 * 30
     uri = URI.parse("https://openexchangerates.org/api/latest.json?app_id=#{OXR_APP_ID}")
     base_usd = Net::HTTP.get_response(uri)
     @base_usd_json_store = JSON.parse base_usd.body
