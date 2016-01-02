@@ -9,7 +9,7 @@ load "token.rb"
 #   exit 130
 # end
 
-Start_Text = "I convert $, €, ₽ currencies based on Open Exchange Rates. Ask me '$4' for example. Or '100 ₽'."
+Start_Text = "I convert $, €, ₽ currencies based on Open Exchange Rates. Ask me '$1' for example. Or '100 ₽'."
 
 
 def base_usd_json
@@ -56,7 +56,14 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
   bot.listen do |message|
     case message.text
     when '/start'
-      bot.api.send_message(chat_id: message.chat.id, text: "Hello, #{message.from.first_name}. #{Start_Text}")
+      keys = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: [
+        ["1 dollar", "1 euro"],
+        ["100 rubles", "1000 ₽", "5000 ₽"],
+        ["$100", "200$", "$500", "$1000"],
+        ["100 €", "200 €", "500 €", "1000 €"],
+      ], one_time_keyboard: false)
+
+      bot.api.send_message(chat_id: message.chat.id, text: "Hello, #{message.from.first_name}. #{Start_Text}", reply_markup: keys)
     when '/stop'
       bot.api.send_message(chat_id: message.chat.id, text: "Bye, #{message.from.first_name}")
     when /([$€₽a-zа-я]*)\s*([\d.,]{1,15})\s*([$€₽a-zа-я]*)/i # https://regex101.com/r/cJ3bG1/1
