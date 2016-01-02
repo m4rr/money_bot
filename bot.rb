@@ -49,7 +49,7 @@ def convert hash
 
   result = change_currency == :RUB ? (amount * rate) : (amount / rate)
 
-  "#{result.round(2)} #{change_currency}"
+  "#{space_in result.round(2)} #{change_currency}"
 end
 
 def space_in number
