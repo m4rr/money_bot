@@ -61,7 +61,6 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
         ["1 dollar", "$100", "$500", "$1000"],
         ["1 euro", "100 €", "500 €", "1000 €"],
       ], resize_keyboard: true, one_time_keyboard: false)
-
       bot.api.send_message(chat_id: message.chat.id, text: "Hello, #{message.from.first_name}. #{Start_Text}", reply_markup: keys)
     when '/stop'
       bot.api.send_message(chat_id: message.chat.id, text: "Bye, #{message.from.first_name}")
