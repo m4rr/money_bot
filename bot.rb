@@ -28,7 +28,7 @@ def detect_currency value
     :USD
   when /€|EUR[a-z]{0,2}|евро/i
     :EUR
-  when '₽', /RUB{0,4}|руб[a-zа-я]{0,4}|деревян[a-zа-я]{0,3}/i
+  when /₽|RUB{0,4}|руб[a-zа-я]{0,4}|деревян[a-zа-я]{0,3}/i
     :RUB
   else
     :USD
@@ -59,8 +59,7 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
       bot.api.send_message(chat_id: message.chat.id, text: "Hello, #{message.from.first_name}. #{Start_Text}")
     when '/stop'
       bot.api.send_message(chat_id: message.chat.id, text: "Bye, #{message.from.first_name}")
-    when /([a-zа-я]*)\s*([\d.,]{1,15})\s*([a-zа-я]*)/i # https://regex101.com/r/cJ3bG1/1
-      # $2.gsub! ',', '.' if $2.is_a? String
+    when /([$€₽a-zа-я]*)\s*([\d.,]{1,15})\s*([$€₽a-zа-я]*)/i # https://regex101.com/r/cJ3bG1/1
       hash = { amount: $2, currency: [$1, $3].compact.reject(&:empty?).first }
       bot.api.send_message(chat_id: message.chat.id, text: convert(hash))
     else
