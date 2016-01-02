@@ -54,7 +54,7 @@ end
 
 def space_in number
   number.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1 ').reverse
-end 
+end
 
 Telegram::Bot::Client.run(TOKEN) do |bot|
   bot.listen do |message|
