@@ -15,7 +15,7 @@ Start chat with [@USDRUB_bot](https://telegram.me/USDRUB_bot) in Telegram.
 ```sh
 $ bundle
 $ echo "TOKEN = 'YOUR_TOKEN'" >> token.rb
-$ echo "OXR_APP_ID = 'YOUR_OXR_TOKEN'" >> token.rb    # Open Exchange Rates Token
+$ echo "OXR_APP_ID = 'YOUR_OXR_ID'" >> token.rb    # Open Exchange Rates Token
 ```
 
 # Starting
