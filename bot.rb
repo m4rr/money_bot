@@ -56,16 +56,18 @@ def space_in number
   number.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1 ').reverse
 end
 
+@keys = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: [
+  ["100 rubles", "1000 ₽", "5000 ₽"],
+  ["1 dollar", "$100", "$500", "$1000"],
+  ["1 euro", "100 €", "500 €", "1000 €"],
+  ], resize_keyboard: true, one_time_keyboard: false)
+
 Telegram::Bot::Client.run(TOKEN) do |bot|
   bot.listen do |message|
     case message.text
     when '/start'
-      keys = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: [
-        ["100 rubles", "1000 ₽", "5000 ₽"],
-        ["1 dollar", "$100", "$500", "$1000"],
-        ["1 euro", "100 €", "500 €", "1000 €"],
-      ], resize_keyboard: true, one_time_keyboard: false)
-      bot.api.send_message(chat_id: message.chat.id, text: "Hello, #{message.from.first_name}. #{Start_Text}", reply_markup: keys)
+      bot.api.send_message(chat_id: message.chat.id, 
+        text: "Hello, #{message.from.first_name}. #{Start_Text}", reply_markup: @keys)
     when '/stop'
       bot.api.send_message(chat_id: message.chat.id, text: "Bye, #{message.from.first_name}")
     when /([$€₽a-zа-я]*)\s?([\d.,]{1,15})\s?([$€₽a-zа-я]*)/i # https://regex101.com/r/cJ3bG1/1
