@@ -74,7 +74,7 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
       hash = { amount: $2, currency: [$1, $3].compact.reject(&:empty?).first }
       bot.api.send_message(chat_id: message.chat.id, text: convert(hash))
     else
-      bot.api.send_message(chat_id: message.chat.id, text: "Not sure. #{Start_Text}")
+      puts "ELSE #{message.text}"
     end
   end
 end
