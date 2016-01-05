@@ -1,4 +1,4 @@
-# Money Bot
+# Money/USDRUB Bot
 
 I can exchange $, €, ₽ currencies. Ask me '$4' for example. Or '100 ₽'.
 
@@ -6,7 +6,7 @@ Telegram chat bot like
 * you ask `$10`
 * she replies `735 ₽`
 
-# USE
+## Use bot
 
 Start chat with [@USDRUB_bot](https://telegram.me/USDRUB_bot) in Telegram.
 
