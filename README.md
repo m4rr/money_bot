@@ -25,4 +25,6 @@ $ bundle exec ruby bot.rb
 $ bundle exec ruby bot.rb            # foreground execution with stdout
 #                                    # OR
 $ nohup bundle exec ruby bot.rb &    # background execution
+#                                    # OR
+$ ./deploy.sh                        # bash-script to start background execution
 ```
