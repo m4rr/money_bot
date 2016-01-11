@@ -40,7 +40,7 @@ def convert hash
   currency = detect_currency hash[:currency]
   change_currency = currency == :USD || currency == :EUR ? :RUB : :USD
 
-  amount = (hash[:amount]).to_f
+  amount = (hash[:amount]).delete(' _').sub(',', '.').to_f
   usdrub_rate = (base_usd_json['rates']['RUB']).to_f
   usdeur_rate = (base_usd_json['rates']['EUR']).to_f
 
@@ -71,7 +71,7 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
     when '/stop'
       bot.api.send_message(chat_id: message.chat.id, 
         text: "Bye, #{message.from.first_name}")
-    when /^([$€₽a-zа-я]{0,15})\s?([\d.,]{1,15})\s?([$€₽a-zа-я]{0,15})/i # https://regex101.com/r/cJ3bG1/1
+    when /^([$€₽a-zа-я]{0,15})\s?([\d., _]{1,15})\s?([$€₽a-zа-я]{0,15})/i # https://regex101.com/r/cJ3bG1/1
       hash = { amount: $2, currency: [$1, $3].compact.reject(&:empty?).first }
       bot.api.send_message(chat_id: message.chat.id, text: convert(hash))
     else
