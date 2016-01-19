@@ -26,8 +26,10 @@ def detect_currency value
     :EUR
   when /₽|RUB{0,4}|руб[a-zа-я]{0,4}|деревян[a-zа-я]{0,3}/i
     :RUB
-  else
+  when ""
     :USD
+  else
+    :not_expected
   end
 end
 
@@ -35,6 +37,8 @@ end
 def convert hash
   puts hash
   currency = detect_currency(hash[:currency])
+  return "∅" if currency == :not_expected
+
   change_currency = currency == :USD || currency == :EUR ? :RUB : :USD
 
   amount = (hash[:amount]).delete(' _').sub(',', '.').to_f
