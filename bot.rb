@@ -73,11 +73,12 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
       text = "Bye, #{message.from.first_name}"
       bot.api.send_message(chat_id: message.chat.id, text: text)
 
-    when /^([$€₽a-zа-я ]{0,15})([\d., _]{1,15})([$€₽a-zа-я ]{0,15})/i
-    # https://regex101.com/r/cJ3bG1/1
+    when /^([$€₽a-zа-я]{0,15}) ?([\d., _]{1,15}) ?([$€₽a-zа-я]{0,15})/i
+    # https://regex101.com/r/cJ3bG1/2
       hash = { amount: $2, currency: [$1, $3].compact.reject(&:empty?).first }
       text = convert(hash)
       bot.api.send_message(chat_id: message.chat.id, text: text)
+      
     else
       puts "ELSE #{message.text}"
     end
