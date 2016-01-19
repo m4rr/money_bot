@@ -4,13 +4,7 @@ require 'telegram/bot'
 
 load "token.rb"
 
-# trap "SIGINT" do
-#   puts "Exiting"
-#   exit 130
-# end
-
 Start_Text = "I convert $, €, ₽ currencies based on Open Exchange Rates. Ask me '$1' for example. Or '100 ₽'."
-
 
 def base_usd_json
   if @last_checked.nil? || Time.now.to_i - @last_checked.to_i > 60 * 30
@@ -23,7 +17,7 @@ def base_usd_json
 end
 
 def detect_currency value
-  case value
+  case value.to_s.strip
   when /\$|USD|dollar[s]?|бакс[а-я]{0,2}|доллар[а-я]{0,2}|грин[а-я]?/i
     :USD
   when /€|EUR[a-z]{0,2}|евро/i
@@ -37,7 +31,7 @@ end
 
 def convert hash
   puts hash
-  currency = detect_currency hash[:currency]
+  currency = detect_currency(hash[:currency])
   change_currency = currency == :USD || currency == :EUR ? :RUB : :USD
 
   amount = (hash[:amount]).delete(' _').sub(',', '.').to_f
@@ -73,12 +67,14 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
       text = "Bye, #{message.from.first_name}"
       bot.api.send_message(chat_id: message.chat.id, text: text)
 
-    when /^([$€₽a-zа-я]{0,15}) ?([\d., _]{1,15}) ?([$€₽a-zа-я]{0,15})/i
+    when /^([ $€₽a-zа-я]{0,15})([\d ,.]{1,15})([ $€₽a-zа-я]{0,15})/i
     # https://regex101.com/r/cJ3bG1/2
-      hash = { amount: $2, currency: [$1, $3].compact.reject(&:empty?).first }
-      text = convert(hash)
-      bot.api.send_message(chat_id: message.chat.id, text: text)
-      
+      if $2.to_f > 0
+        hash = { amount: $2, currency: [$1, $3].compact.reject(&:empty?).first }
+        text = convert hash
+        bot.api.send_message(chat_id: message.chat.id, text: text)
+      end
+
     else
       puts "ELSE #{message.text}"
     end
