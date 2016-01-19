@@ -6,6 +6,7 @@ load "token.rb"
 
 Start_Text = "I convert $, €, ₽ currencies based on Open Exchange Rates. Ask me '$1' for example. Or '100 ₽'."
 
+# check currencies on OXR
 def base_usd_json
   if @last_checked.nil? || Time.now.to_i - @last_checked.to_i > 60 * 30
     uri = URI.parse("https://openexchangerates.org/api/latest.json?app_id=#{OXR_APP_ID}")
@@ -16,6 +17,7 @@ def base_usd_json
   @base_usd_json_store
 end
 
+# currency string to symbol
 def detect_currency value
   case value.to_s.strip
   when /\$|USD|dollar[s]?|бакс[а-я]{0,2}|доллар[а-я]{0,2}|грин[а-я]?/i
@@ -29,6 +31,7 @@ def detect_currency value
   end
 end
 
+# convert values in hash
 def convert hash
   puts hash
   currency = detect_currency(hash[:currency])
@@ -46,10 +49,12 @@ def convert hash
   "#{space_in result.round(2)} #{change_currency}"
 end
 
+# format number to string with thousands separator
 def space_in number
   number.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1 ').reverse
 end
 
+# bot custom keyboard
 @keys = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: [
   ["100 rubles", "1000 ₽", "5000 ₽"],
   ["1 dollar", "$100", "$500", "$1000"],
@@ -67,11 +72,9 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
       text = "Bye, #{message.from.first_name}"
       bot.api.send_message(chat_id: message.chat.id, text: text)
 
-    when /^([ $€₽a-zа-я]{0,15})([\d ,.]{1,15})([ $€₽a-zа-я]{0,15})/i
-    # https://regex101.com/r/cJ3bG1/2
+    when /^([ $€₽a-zа-я]{0,15})([\d ,.]{1,15})([ $€₽a-zа-я]{0,15})/i # https://regex101.com/r/cJ3bG1/2
       if $2.to_f > 0
-        hash = { amount: $2, currency: [$1, $3].compact.reject(&:empty?).first }
-        text = convert hash
+        text = convert { amount: $2, currency: [$1, $3].compact.reject(&:empty?).first }
         bot.api.send_message(chat_id: message.chat.id, text: text)
       end
 
