@@ -20,14 +20,14 @@ end
 # currency string to symbol
 def detect_currency value
   case value.to_s.strip
+  when ""
+    :USD
   when /\$|USD|dollar[s]?|бакс[а-я]{0,2}|доллар[а-я]{0,2}|грин[а-я]?/i
     :USD
   when /€|EUR[a-z]{0,2}|евро/i
     :EUR
   when /₽|RUB{0,4}|руб[a-zа-я]{0,4}|деревян[a-zа-я]{0,3}/i
     :RUB
-  when ""
-    :USD
   else
     :not_expected
   end
@@ -36,7 +36,7 @@ end
 # convert values in hash
 def convert hash
   puts hash
-  currency = detect_currency(hash[:currency])
+  currency = detect_currency hash[:currency]
   return "∅" if currency == :not_expected
 
   change_currency = currency == :USD || currency == :EUR ? :RUB : :USD
@@ -78,7 +78,7 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
 
     when /^([ $€₽a-zа-я]{0,15})([\d ,.]{1,15})([ $€₽a-zа-я]{0,15})/i # https://regex101.com/r/cJ3bG1/2
       if $2.to_f > 0
-        text = convert({ amount: $2, currency: [$1, $3].compact.reject(&:empty?).first })
+        text = convert({amount: $2, currency: [$1, $3].compact.reject(&:empty?).first})
         bot.api.send_message(chat_id: message.chat.id, text: text)
       end
 
