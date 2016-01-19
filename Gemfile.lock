@@ -12,6 +12,7 @@ GEM
     equalizer (0.0.11)
     gene_pool (1.4.1)
       thread_safe
+    god (0.13.7)
     httmultiparty (0.3.16)
       httparty (>= 0.7.3)
       mimemagic
@@ -44,6 +45,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  god
   telegram-bot-ruby
 
 BUNDLED WITH
