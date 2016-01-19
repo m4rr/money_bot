@@ -60,20 +60,24 @@ end
   ["100 rubles", "1000 ₽", "5000 ₽"],
   ["1 dollar", "$100", "$500", "$1000"],
   ["1 euro", "100 €", "500 €", "1000 €"],
-  ], resize_keyboard: true, one_time_keyboard: false)
+], resize_keyboard: true, one_time_keyboard: false)
 
 Telegram::Bot::Client.run(TOKEN) do |bot|
   bot.listen do |message|
     case message.text
     when '/start'
-      bot.api.send_message(chat_id: message.chat.id, 
-        text: "Hello, #{message.from.first_name}. #{Start_Text}", reply_markup: @keys)
+      text = "Hello, #{message.from.first_name}. #{Start_Text}"
+      bot.api.send_message(chat_id: message.chat.id, text: text, reply_markup: @keys)
+
     when '/stop'
-      bot.api.send_message(chat_id: message.chat.id, 
-        text: "Bye, #{message.from.first_name}")
-    when /^([$€₽a-zа-я]{0,15})\s?([\d., _]{1,15})\s?([$€₽a-zа-я]{0,15})/i # https://regex101.com/r/cJ3bG1/1
+      text = "Bye, #{message.from.first_name}"
+      bot.api.send_message(chat_id: message.chat.id, text: text)
+
+    when /^([$€₽a-zа-я ]{0,15})([\d., _]{1,15})([$€₽a-zа-я ]{0,15})/i
+    # https://regex101.com/r/cJ3bG1/1
       hash = { amount: $2, currency: [$1, $3].compact.reject(&:empty?).first }
-      bot.api.send_message(chat_id: message.chat.id, text: convert(hash))
+      text = convert(hash)
+      bot.api.send_message(chat_id: message.chat.id, text: text)
     else
       puts "ELSE #{message.text}"
     end
