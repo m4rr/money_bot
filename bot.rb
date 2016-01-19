@@ -74,7 +74,7 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
 
     when /^([ $€₽a-zа-я]{0,15})([\d ,.]{1,15})([ $€₽a-zа-я]{0,15})/i # https://regex101.com/r/cJ3bG1/2
       if $2.to_f > 0
-        text = convert { amount: $2, currency: [$1, $3].compact.reject(&:empty?).first }
+        text = convert({ amount: $2, currency: [$1, $3].compact.reject(&:empty?).first })
         bot.api.send_message(chat_id: message.chat.id, text: text)
       end
 
