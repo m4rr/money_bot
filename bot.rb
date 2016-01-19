@@ -37,7 +37,7 @@ end
 def convert hash
   puts hash
   currency = detect_currency hash[:currency]
-  return "∅" if currency == :not_expected
+  return Start_Text if currency == :not_expected
 
   change_currency = currency == :USD || currency == :EUR ? :RUB : :USD
 
