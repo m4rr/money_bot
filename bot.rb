@@ -35,9 +35,8 @@ end
 
 # convert values in hash
 def convert hash
-  puts hash
   currency = detect_currency hash[:currency]
-  return Start_Text if currency == :not_expected
+  return "" if currency == :not_expected
 
   change_currency = currency == :USD || currency == :EUR ? :RUB : :USD
 
@@ -56,6 +55,10 @@ end
 # format number to string with thousands separator
 def space_in number
   number.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1 ').reverse
+end
+
+def nothing
+  
 end
 
 # bot custom keyboard
@@ -79,11 +82,11 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
     when /^([ $€₽a-zа-я]{0,15})([\d ,.]{1,15})([ $€₽a-zа-я]{0,15})/i # https://regex101.com/r/cJ3bG1/2
       if $2.to_f > 0
         text = convert({amount: $2, currency: [$1, $3].compact.reject(&:empty?).first})
-        bot.api.send_message(chat_id: message.chat.id, text: text)
+        bot.api.send_message(chat_id: message.chat.id, text: text) if text != ""
       end
 
     else
-      puts "ELSE #{message.text}"
+      nothing
     end
   end
 end
