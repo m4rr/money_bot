@@ -83,7 +83,7 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
       text = "🙀"
       bot.api.send_message(chat_id: message.chat.id, text: text)
 
-    when /блять/i
+    when /блят|бляд/i
       text = "💃🏼"
       bot.api.send_message(chat_id: message.chat.id, text: text)
 
