@@ -79,7 +79,7 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
       text = "Bye, #{message.from.first_name}"
       bot.api.send_message(chat_id: message.chat.id, text: text)
 
-    when /хуй|хуе|хуё|хуи/i
+    when /хуй|хуе|хуё|хуи|хуя/i
       text = "🙀"
       bot.api.send_message(chat_id: message.chat.id, text: text)
 
