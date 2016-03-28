@@ -87,12 +87,12 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
 
     # https://regex101.com/r/cJ3bG1/2
 
-    when /([\d,.]{1,15}) ?([$€₽a-zа-я]{0,15})/i
-      text = convert({ amount: $1, currency: $2 })
+    when /([$€₽]{1,15}) ?([\d,.]{1,15})/i
+      text = convert({ amount: $2, currency: $1 })
       bot.api.send_message(chat_id: message.chat.id, text: text) if text != ""
 
-    when /([$€₽]{0,15}) ?([\d,.]{1,15})/i
-      text = convert({ amount: $2, currency: $1 })
+    when /([\d,.]{1,15}) ?([$€₽a-zа-я]{1,15})/i
+      text = convert({ amount: $1, currency: $2 })
       bot.api.send_message(chat_id: message.chat.id, text: text) if text != ""
 
     else
