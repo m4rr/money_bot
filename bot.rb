@@ -20,8 +20,6 @@ end
 # currency string to symbol
 def detect_currency value
   case value.to_s.strip
-  when ""
-    :USD
   when /\$|USD|dollar[s]?|бакс[а-я]{0,2}|доллар[а-я]{0,2}|грин[а-я]?/i
     :USD
   when /€|EUR[a-z]{0,2}|евро/i
@@ -87,11 +85,15 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
       text = "💃🏼"
       bot.api.send_message(chat_id: message.chat.id, text: text)
 
-    when /^([ $€₽a-zа-я]{0,15})([\d ,.]{1,15})([ $€₽a-zа-я]{0,15})/i # https://regex101.com/r/cJ3bG1/2
-      if $2.to_f > 0
-        text = convert({amount: $2, currency: [$1, $3].compact.reject(&:empty?).first})
-        bot.api.send_message(chat_id: message.chat.id, text: text) if text != ""
-      end
+    # https://regex101.com/r/cJ3bG1/2
+
+    when /([\d,.]{1,15}) ?([$€₽a-zа-я]{0,15})/i
+      text = convert { amount: $1, currency: $2 }
+      bot.api.send_message(chat_id: message.chat.id, text: text) if text != ""
+
+    when /([$€₽]{0,15}) ?([\d,.]{1,15})/i
+      text = convert { amount: $2, currency: $1 }
+      bot.api.send_message(chat_id: message.chat.id, text: text) if text != ""
 
     else
       nothing
