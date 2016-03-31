@@ -31,6 +31,11 @@ def detect_currency value
   end
 end
 
+# format number to string with thousands separator
+def space_in number
+  number.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1 ').reverse
+end
+
 # convert values in hash
 def convert hash
   currency = detect_currency hash[:currency]
@@ -50,11 +55,6 @@ def convert hash
   "#{space_in result.round(2)} #{change_currency}"
 end
 
-# format number to string with thousands separator
-def space_in number
-  number.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1 ').reverse
-end
-
 def nothing
 
 end
@@ -62,8 +62,8 @@ end
 # bot custom keyboard
 @keys = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: [
   ["100 rubles", "1000 ₽", "5000 ₽"],
-  ["1 dollar", "$100", "$500", "$1000"],
-  ["1 euro", "100 €", "500 €", "1000 €"],
+  ["1 dollar",  "$100",   "$500",  "$1000"],
+  ["1 euro",     "100 €",  "500 €", "1000 €"],
 ], resize_keyboard: true, one_time_keyboard: false)
 
 Telegram::Bot::Client.run(TOKEN) do |bot|
@@ -85,13 +85,13 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
       text = "💃🏼"
       bot.api.send_message(chat_id: message.chat.id, text: text)
 
-    # https://regex101.com/r/cJ3bG1/2
+    # https://regex101.com/r/cJ3bG1/3
 
     when /([$€₽]{1,15}) ?([\d,.]{1,15})/i
       text = convert({ amount: $2, currency: $1 })
       bot.api.send_message(chat_id: message.chat.id, text: text) if text != ""
 
-    when /([\d,.]{1,15}) ?([$€₽a-zа-я]{1,15})/i
+    when /([-+]?[0-9]+[.,]?[0-9]*) ?([$€₽]{1,2}|[a-zа-я]{3,15})/i
       text = convert({ amount: $1, currency: $2 })
       bot.api.send_message(chat_id: message.chat.id, text: text) if text != ""
 
