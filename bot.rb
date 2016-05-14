@@ -2,7 +2,8 @@ require "net/http"
 require "uri"
 require 'telegram/bot'
 
-load "token.rb"
+path = File.expand_path(File.dirname(__FILE__))
+load "#{path}/token.rb"
 
 Start_Text = "I convert $, €, ₽ currencies based on Open Exchange Rates. Ask me '$1' for example. Or '100 ₽'."
 
