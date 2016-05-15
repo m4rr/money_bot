@@ -21,9 +21,9 @@ $ echo "OXR_APP_ID = 'YOUR_OXR_ID'" >> token.rb    # App token from Open Exchang
 # Starting
 
 ```sh
-$ bundle exec ruby bot.rb            # foreground execution with stdout
-#                                    # OR
-$ nohup bundle exec ruby bot.rb &    # background execution
-#                                    # OR
-$ ./start.sh                         # bash-script to start background execution
+$ ruby bot.rb            # foreground execution with stdout
+#                        # OR
+$ god -c simple.god      # background execution via superviser
+#                        # OR
+$ ./start.sh             # bash-script to start background execution via superviser
 ```
