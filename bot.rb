@@ -5,23 +5,22 @@ require 'telegram/bot'
 path = File.expand_path(File.dirname(__FILE__))
 load "#{path}/token.rb"
 
-Start_Text = "I convert $, €, ₽ currencies based on Open Exchange Rates. Ask me '$1' for example. Or '100 ₽'."
+Greet = "I convert $, €, ₽ currencies based on Open Exchange Rates. Ask me '$1' for example. Or '100 ₽'."
 Keys = [
-  ["100 rubles", "1000 рублей", "3000 ₽", "50000 ₽", "70000 ₽"],
-  ["1 dollar", "$100", "$500", "$1000"],
-  ["1 euro", "100 €", "500 €", "1000 €"],
+  ["100 рублей", "1000 rubles", "5000 ₽" ],
+  ["1 dollar", "$100", "$500", "1000 USD"],
+  ["1 euro", "100 €", "500 €", "1000 EUR"],
 ]
 
 # check currencies on OXR
 def usd_base_json
-  if @last_checked.nil? || Time.now.to_i - @last_checked.to_i > 30 * 60
-    uri = URI.parse("https://openexchangerates.org/api/latest.json?app_id=#{OXR_APP_ID}")
-    base_usd = Net::HTTP.get_response(uri)
-    @usd_base_json_store = JSON.parse base_usd.body
-    @last_checked = Time.now
-    puts('@last_checked', @last_checked)
+  if @last_check.nil? || Time.now.to_i - @last_check.to_i > 30 * 60
+    oxr_latest_uri = URI.parse("https://openexchangerates.org/api/latest.json?app_id=#{OXR_APP_ID}")
+    oxr_response = Net::HTTP.get_response(oxr_latest_uri)
+    @json_storage = JSON.parse(oxr_response.body)
+    @last_check = Time.now
   end
-  @usd_base_json_store
+  @json_storage
 end
 
 # currency string to symbol
@@ -73,7 +72,7 @@ def parse message
   case message.text
   when '/start'
     result[:reply_markup] = custom_keyboard
-    result[:text] = "Hello, #{message.from.first_name}. #{Start_Text}"
+    result[:text] = "Hello, #{message.from.first_name}. #{Greet}"
 
   when /([$€₽]{1,15}) ?([\d,.]{1,15})/i
     result[:text] = convert({ amount: $2, currency: $1 })
