@@ -6,11 +6,9 @@ path = File.expand_path(File.dirname(__FILE__))
 load "#{path}/token.rb"
 
 Greet = "I am converting amounts in <b>$, €, ₽</b>. <i>(Based on Open Exchange Rates.)</i>\nAsk me “$1”. Or „100 ₽“."
-Keys = [
-  ["100 рублей", "1000 rubles", "5000 ₽" ],
-  ["1 dollar", "$100", "$500", "1000 USD"],
-  ["1 euro", "100 €", "500 €", "1000 EUR"],
-]
+Keys = [ ['100 рублей', '1000 rubles', '5000 ₽'],
+         ['1 dollar', '$100', '$500', '$1000'  ],
+         ['1 euro', '100 €', '500 €',  '1000 €'], ]
 
 # check currencies on OXR
 def usd_base_json
@@ -47,8 +45,6 @@ def convert hash
   currency = detect_currency hash[:currency]
   return nil if currency == :not_expected
 
-  change_currency = currency == :USD || currency == :EUR ? :RUB : :USD
-
   amount = (hash[:amount]).delete(' _').sub(',', '.').to_f
   usdrub_rate = (usd_base_json['rates']['RUB']).to_f
   usdeur_rate = (usd_base_json['rates']['EUR']).to_f
@@ -56,22 +52,19 @@ def convert hash
   rate = usdrub_rate
   rate = usdrub_rate / usdeur_rate if currency == :EUR
 
+  change_currency = currency == :USD || currency == :EUR ? :RUB : :USD
   result = change_currency == :RUB ? (amount * rate) : (amount / rate)
 
   "#{space_in result.round(2)} #{change_currency}"
 end
 
-def custom_keyboard
-  Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: Keys, resize_keyboard: true, one_time_keyboard: false)
-end
-
 # https://regex101.com/r/cJ3bG1/3
-def parse message
+def parse_message message
   result = { chat_id: message.chat.id }
 
   case message.text
   when '/start'
-    result[:reply_markup] = custom_keyboard
+    result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: Keys, resize_keyboard: true, one_time_keyboard: false)
     result[:parse_mode] = 'HTML'
     result[:text] = "Hi,\n#{Greet}"
 
@@ -94,7 +87,7 @@ end
 
 Telegram::Bot::Client.run(TOKEN) do |bot|
   bot.listen do |message|
-    parameters = parse(message)
+    parameters = parse_message(message)
     if !parameters.nil? && !parameters.empty?
       bot.api.send_message(parameters)
     end
