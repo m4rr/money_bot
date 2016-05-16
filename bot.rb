@@ -5,7 +5,7 @@ require 'telegram/bot'
 path = File.expand_path(File.dirname(__FILE__))
 load "#{path}/token.rb"
 
-Greet = "I convert $, €, ₽ currencies based on Open Exchange Rates. Ask me '$1' for example. Or '100 ₽'."
+Greet = "I am converting amounts in <b>$, €, ₽</b>. <i>(Based on Open Exchange Rates.)</i>\nAsk me “$1”. Or „100 ₽“."
 Keys = [
   ["100 рублей", "1000 rubles", "5000 ₽" ],
   ["1 dollar", "$100", "$500", "1000 USD"],
@@ -72,7 +72,12 @@ def parse message
   case message.text
   when '/start'
     result[:reply_markup] = custom_keyboard
-    result[:text] = "Hello, #{message.from.first_name}. #{Greet}"
+    result[:parse_mode] = 'HTML'
+    result[:text] = "Hi,\n#{Greet}"
+
+  when '/stop'
+    result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardHide.new(hide_keyboard: true)
+    result[:text] = "Si no, no." # https://ukraine.dirty.ru/aragono-katalonskaia-kliatva-vernosti-516221/
 
   when /([$€₽]{1,15}) ?([\d,.]{1,15})/i
     result[:text] = convert({ amount: $2, currency: $1 })
