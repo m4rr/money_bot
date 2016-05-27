@@ -2,4 +2,4 @@ source 'https://rubygems.org'
 
 gem 'god'
 gem 'telegram-bot-ruby'
-gem 'facebook-bot-ruby', '~> 0.1.0'
+# gem 'facebook-bot-ruby', '~> 0.1.0'
