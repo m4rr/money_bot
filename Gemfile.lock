@@ -10,12 +10,13 @@ GEM
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
     equalizer (0.0.11)
+    facebook-bot-ruby (0.1.0)
     faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
     god (0.13.7)
     ice_nine (0.11.2)
     multipart-post (2.0.0)
-    telegram-bot-ruby (0.5.1)
+    telegram-bot-ruby (0.5.2)
       faraday
       virtus
     thread_safe (0.3.5)
@@ -29,6 +30,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  facebook-bot-ruby (~> 0.1.0)
   god
   telegram-bot-ruby
 
