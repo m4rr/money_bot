@@ -30,6 +30,8 @@ def detect_currency value
     :EUR
   when /₽|RUB{0,4}|руб[a-zа-я]{0,4}|деревян[a-zа-я]{0,3}/i
     :RUB
+  when /CAD/i
+    :CAD
   else
     :not_expected
   end
@@ -48,9 +50,11 @@ def convert hash
   amount = (hash[:amount]).delete(' _').sub(',', '.').to_f
   usdrub_rate = (usd_base_json['rates']['RUB']).to_f
   usdeur_rate = (usd_base_json['rates']['EUR']).to_f
+  usdcad_rate = (usd_base_json['rates']['CAD']).to_f
 
   rate = usdrub_rate
   rate = usdrub_rate / usdeur_rate if currency == :EUR
+  rate = usdrub_rate / usdcad_rate if currency == :CAD
 
   change_currency = currency != :RUB ? :RUB : :USD
   result = change_currency == :RUB ? (amount * rate) : (amount / rate)
