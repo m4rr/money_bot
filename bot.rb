@@ -52,7 +52,7 @@ def convert hash
   rate = usdrub_rate
   rate = usdrub_rate / usdeur_rate if currency == :EUR
 
-  change_currency = currency == :USD || currency == :EUR ? :RUB : :USD
+  change_currency = currency != :RUB ? :RUB : :USD
   result = change_currency == :RUB ? (amount * rate) : (amount / rate)
 
   "#{space_in result.round(2)} #{change_currency}"
