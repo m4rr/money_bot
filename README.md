@@ -1,14 +1,12 @@
-# Money/USDRUB Bot
+# Money Bot for Telegram
 
-Convert $, €, ₽, CAD currencies based on Open Exchange Rates.
+Bot is handy in group chats. It listen for the context and convert $, €, ₽, CAD to opposite currencies (based on Open Exchange Rates).
 
 Ask '$1' for example. Or '100 ₽'. Like this:
-* you ask `$10`
-* she replies `735 ₽`
+* someone told in chat `I bought a backpack for $119 free shipping`
+* she replies `7691 ₽`
 
-## Use bot
-
-Start chat with [@USDRUB_bot](https://telegram.me/USDRUB_bot) in Telegram.
+Start chat with **[@USDRUB_bot](https://telegram.me/USDRUB_bot)** in Telegram.
 
 # Installation via Docker
 
