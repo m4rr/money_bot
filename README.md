@@ -1,8 +1,7 @@
 # Money/USDRUB Bot
 
-I convert $, €, ₽ currencies based on Open Exchange Rates. Ask me '$1' for example. Or '100 ₽'.
-
-Telegram chat bot like
+Convert $, €, ₽, CAD currencies based on Open Exchange Rates.
+Ask '$1' for example. Or '100 ₽'. Telegram chat bot like:
 * you ask `$10`
 * she replies `735 ₽`
 
@@ -10,20 +9,18 @@ Telegram chat bot like
 
 Start chat with [@USDRUB_bot](https://telegram.me/USDRUB_bot) in Telegram.
 
-# Installation
+# Installation via Docker
+
+In the folder:
 
 ```sh
-$ bundle
-$ echo "TOKEN = 'YOUR_TOKEN'" >> token.rb          # Telegram Bot Token from @BotFather
-$ echo "OXR_APP_ID = 'YOUR_OXR_ID'" >> token.rb    # App token from Open Exchange Rates
+$ echo "TOKEN = 'YOUR_TOKEN'" >> money_bot/token.rb          # Telegram Bot Token from @BotFather
+$ echo "OXR_APP_ID = 'YOUR_OXR_ID'" >> money_bot/token.rb    # App token from Open Exchange Rates
+$ docker build -t m4rr/money_bot .
 ```
 
 # Starting
 
 ```sh
-$ ruby bot.rb            # foreground execution with stdout
-#                        # OR
-$ god -c simple.god      # background execution via superviser
-#                        # OR
-$ ./start.sh             # bash-script to start background execution via superviser
+$ docker run -d m4rr/money_bot
 ```
