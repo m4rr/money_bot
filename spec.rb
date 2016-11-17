@@ -1,1 +1,0 @@
-load 'bot.rb'
