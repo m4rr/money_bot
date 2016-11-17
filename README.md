@@ -1,7 +1,8 @@
 # Money/USDRUB Bot
 
 Convert $, €, ₽, CAD currencies based on Open Exchange Rates.
-Ask '$1' for example. Or '100 ₽'. Telegram chat bot like:
+
+Ask '$1' for example. Or '100 ₽'. Like this:
 * you ask `$10`
 * she replies `735 ₽`
 
