@@ -3,7 +3,7 @@
 Bot is handy in group chats. She looking for the currencies in context and converts $, €, ₽, CAD to opposite ones (based on Open Exchange Rates).
 
 For example:
-* someone send to a chat `I bought a backpack for $119 free shipping`
+* someone sent to a chat `I bought a backpack for $119 free shipping`
 * she replies `7691 ₽`
 
 Start chat with **[@USDRUB_bot](https://telegram.me/USDRUB_bot)** in Telegram. Ask '$1', '5€' or even '100 RUB'.
