@@ -19,7 +19,7 @@ $ echo "OXR_APP_ID = 'YOUR_OXR_ID'" >> money_bot/token.rb    # App token from Op
 $ docker build -t m4rr/money_bot .
 ```
 
-# Start up container
+# Start Up the Container
 
 ```sh
 $ docker run -d m4rr/money_bot
