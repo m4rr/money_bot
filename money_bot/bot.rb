@@ -30,7 +30,7 @@ def detect_currency value
     :EUR
   when /₽|RUB|руб/i
     :RUB
-  when /CAD/i
+  when /CAD|канадск/i
     :CAD
   else
     :not_expected
@@ -50,9 +50,9 @@ def convert hash
   amount = (hash[:amount]).delete(' _').sub(',', '.').to_f
 
   case hash[:unit]
-  when /mm|млрд/i
+  when /mm|млрд|миллиард/i
     amount *= 1_000_000_000
-  when /m|млн/i
+  when /m|млн|миллион/i
     amount *= 1_000_000
   when /k|к|тыс/i
     amount *= 1_000
@@ -86,7 +86,7 @@ def parse_message message
     result[:text] = "Si no, no." # https://ukraine.dirty.ru/aragono-katalonskaia-kliatva-vernosti-516221/
 
   # https://regexr.com/3uar8
-  when /([$€₽])?(\d+[ \d.,]*)(mm|млрд|m|млн|k|к|тыс)? ?([$€₽]|usd|dollar|eur|rub|cad|руб|доллар|бакс|евро)?/i
+  when /([$€₽])?(\d+[ \d.,]*)(k|mm|m|тыс[а-я]{0,5}|к|млн|миллион[а-я]{0,3}|млрд|миллиард[а-я]{0,3})? ?([$€₽]|usd|dollar|eur|rub|cad|руб|доллар|бакс|евро|канадск[а-я]{0,5} доллар)?/i
     result[:text] = convert({ amount: $2, unit: $3, currency: $1 || $4 })
 
   end
