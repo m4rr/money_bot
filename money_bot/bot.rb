@@ -49,8 +49,15 @@ def convert hash
 
   amount = (hash[:amount]).delete(' _').sub(',', '.').to_f
 
-  amount *= 1000 if hash[:unit] == 'k'
-
+  case hash[:unit]
+  when /mm|млрд/i
+    amount *= 1_000_000_000
+  when /m|млн/i
+    amount *= 1_000_000
+  when /k|к|тыс/i
+    amount *= 1_000
+  end
+  
   usdrub_rate = (usd_base_json['rates']['RUB']).to_f
   usdeur_rate = (usd_base_json['rates']['EUR']).to_f
   usdcad_rate = (usd_base_json['rates']['CAD']).to_f
@@ -79,7 +86,7 @@ def parse_message message
     result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardHide.new(hide_keyboard: true)
     result[:text] = "Si no, no." # https://ukraine.dirty.ru/aragono-katalonskaia-kliatva-vernosti-516221/
 
-  when /([$€₽])?(\d+[ \d.,]*)(k|mm|m|тыс|к|млн|млрд)? ?([$€₽]|usd|dollar|eur|rub|cad|руб|доллар|бакс|евро)?/i
+  when /([$€₽])?(\d+[ \d.,]*)(mm|млрд|m|млн|k|к|тыс)? ?([$€₽]|usd|dollar|eur|rub|cad|руб|доллар|бакс|евро)?/i
     result[:text] = convert({ amount: $2, unit: $3, currency: $1 || $4 })
 
   end
