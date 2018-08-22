@@ -1,6 +1,6 @@
 # Money Bot for Telegram
 
-Bot is handy in group chats. She looking for the currencies in context and converts $, €, ₽, CAD to opposite ones (based on Open Exchange Rates).
+Bot is handy in group chats. She looks for the currencies in chat context and converts $, €, ₽, CAD currencies to opposite ones (based on Open Exchange Rates). _Opposite ones_ are set empirically.
 
 For example:
 * someone sent to a chat `bought a backpack for $119 free shipping`
