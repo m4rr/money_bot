@@ -69,7 +69,13 @@ def convert hash
   change_currency = currency != :RUB ? :RUB : :USD
   result = change_currency == :RUB ? (amount * rate) : (amount / rate)
 
-  "#{space_in result.round(2)} #{change_currency}"
+  if change_currency == :RUB && result < 100 || result < 10
+    result = result.round(2)
+  else
+    result = result.round
+  end
+
+  "#{space_in result} #{change_currency}"
 end
 
 def parse_message message
