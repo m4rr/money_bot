@@ -24,14 +24,14 @@ end
 # currency string to symbol
 def detect_currency value
   case value.to_s.strip
+  when /CAD|канадск/i
+    :CAD
   when /\$|USD|dollar|доллар|бакс/i
     :USD
   when /€|EUR|евро/i
     :EUR
   when /₽|RUB|руб/i
     :RUB
-  when /CAD|канадск/i
-    :CAD
   else
     :not_expected
   end
