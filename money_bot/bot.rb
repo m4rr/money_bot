@@ -24,11 +24,11 @@ end
 # currency string to symbol
 def detect_currency value
   case value.to_s.strip
-  when /\$|USD|dollar[s]?|бакс[а-я]{0,2}|доллар[а-я]{0,2}|грин[а-я]?/i
+  when /\$|USD|dollar|доллар|бакс/i
     :USD
-  when /€|EUR[a-z]{0,2}|евро/i
+  when /€|EUR|евро/i
     :EUR
-  when /₽|RUB{0,4}|руб[a-zа-я]{0,4}|деревян[a-zа-я]{0,3}/i
+  when /₽|RUB|руб/i
     :RUB
   when /CAD/i
     :CAD
@@ -48,6 +48,9 @@ def convert hash
   return nil if currency == :not_expected
 
   amount = (hash[:amount]).delete(' _').sub(',', '.').to_f
+
+  amount *= 1000 if hash[:unit] == 'k'
+
   usdrub_rate = (usd_base_json['rates']['RUB']).to_f
   usdeur_rate = (usd_base_json['rates']['EUR']).to_f
   usdcad_rate = (usd_base_json['rates']['CAD']).to_f
@@ -76,11 +79,8 @@ def parse_message message
     result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardHide.new(hide_keyboard: true)
     result[:text] = "Si no, no." # https://ukraine.dirty.ru/aragono-katalonskaia-kliatva-vernosti-516221/
 
-  when /([$€₽]{1,15}) ?([\d,.]{1,15})/i
-    result[:text] = convert({ amount: $2, currency: $1 })
-
-  when /([-+]?[0-9]+[.,]?[0-9]*) ?([$€₽]{1,2}|[a-zа-я]{3,15})/i
-    result[:text] = convert({ amount: $1, currency: $2 })
+  when /([$€₽])?(\d+[ \d.,]*)(k|mm|m|тыс|к|млн|млрд)? ?([$€₽]|usd|dollar|eur|rub|cad|руб|доллар|бакс|евро)?/i
+    result[:text] = convert({ amount: $2, unit: $3, currency: $1 || $4 })
 
   end
 
