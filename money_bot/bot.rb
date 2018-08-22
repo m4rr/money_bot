@@ -72,7 +72,6 @@ def convert hash
   "#{space_in result.round(2)} #{change_currency}"
 end
 
-# https://regex101.com/r/cJ3bG1/3
 def parse_message message
   result = { chat_id: message.chat.id }
 
@@ -86,6 +85,7 @@ def parse_message message
     result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardHide.new(hide_keyboard: true)
     result[:text] = "Si no, no." # https://ukraine.dirty.ru/aragono-katalonskaia-kliatva-vernosti-516221/
 
+  # https://regexr.com/3uar8
   when /([$€₽])?(\d+[ \d.,]*)(mm|млрд|m|млн|k|к|тыс)? ?([$€₽]|usd|dollar|eur|rub|cad|руб|доллар|бакс|евро)?/i
     result[:text] = convert({ amount: $2, unit: $3, currency: $1 || $4 })
 
