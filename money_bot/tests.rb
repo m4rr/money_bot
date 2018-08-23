@@ -18,6 +18,11 @@ def run_tests
   result &= handle_thousands_separtor("1,000") == 1000
   result &= handle_thousands_separtor("1000000,01") == 1000000.01
   result &= handle_thousands_separtor("1,000,000") == 1000000
+  result &= handle_thousands_separtor("0,015") == 0.015
+
+  result &= handle_thousands_separtor("-1") == -1
+
+  result &= handle_thousands_separtor("0.0.0") == 0
   
   result &= parse_text("1$") == parse_text("$1")
   # puts("$1", result, "")
@@ -39,7 +44,6 @@ def run_tests
   # puts(handle_thousands_separtor("15.000"), handle_thousands_separtor("9,99"), result, "")
   result &= parse_text("0.99 $").to_i < parse_text("$10 mm ").to_i
   # puts("$10 mm ", result, "")
-  # puts result
   
   result
 end
@@ -48,3 +52,5 @@ if run_tests == false
   puts "tests failed"
   exit 1
 end
+
+puts "tests succeeded"

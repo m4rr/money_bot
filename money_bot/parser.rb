@@ -3,7 +3,7 @@ def handle_thousands_separtor value
 
   if value.include?('.') && value.include?(',') # 1,000,000.01 usd
     value.delete! ','
-  elsif value.include?(',') && value.index(/\d{3}$/) != nil # 1,000
+  elsif value.include?(',') && value.index(/\d{3}$/) != nil && value[0] != '0' # 1,000 / 0,015
     value.delete! ','
   elsif value.include?(',') # 1000000,01 rub
     value.sub!(',', '.')
@@ -74,7 +74,9 @@ def convert_values hash
   
   to_currency = from_currency == :RUB ? :USD : :RUB
 
-  if to_currency == :RUB && result < 100 || result < 10
+  if to_currency == :RUB && result < 10 || result < 1
+    result = result.round(3)
+  elsif to_currency == :RUB && result < 100 || result < 10
     result = result.round(2)
   else
     result = result.round
