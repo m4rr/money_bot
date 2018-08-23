@@ -6,19 +6,19 @@ path = File.expand_path(File.dirname(__FILE__))
 load "#{path}/token.rb"
 
 Greet = """
-Бот отвечает на сообщения с ценой и валютой. Конвертирует $ и € в ₽, и обратно. Напишите „$10k“ или „100 000 рублей“.
+Бот отвечает на сообщения с ценой и валютой. Конвертирует <b>$ и € в ₽</b>, и обратно. Напишите „<b>$10k</b>“ или „<b>100 000 рублей</b>“.
 
 Не собирает и не хранит переписки. Свободно добавляйте в ваш международный групповой чат. Весь <a href='https://github.com/m4rr/money_bot'>код открыт</a>.
 
-Автор — Марат Сайтаков. Подписывайтесь на мой канал <a href='https://t.me/CitoyenMarat'>@CitoyenMarat</a> и твиттер @<a href='https://twitter.com/m4rr'>m4rr</a>.
+Автор — Марат Сайтаков. Подписывайтесь на мой канал <a href='https://t.me/CitoyenMarat'>@CitoyenMarat</a> и твиттер <a href='https://twitter.com/m4rr'>@m4rr</a>.
 
 * * *
 
-Bot replies to messages containing amount & currency info. Converts $ and € to ₽, and back. Ask “$10k” or “100 000 RUB.”
+Bot replies to messages containing amount & currency info. Converts <b>$ and € to ₽</b>, and back. Ask “<b>$10k</b>” or “<b>100 000 RUB</b>.”
 
 Doesn’t collect and/or store converstaions. Safely add her to a group chat. Uses Open Exchange Rates. <a href='https://github.com/m4rr/money_bot'>Open source</a>.
 
-© Marat Saytakov. Join my channel <a href='https://t.me/CitoyenMarat'>@CitoyenMarat</a> and twitter @<a href='https://twitter.com/m4rr'>m4rr</a>.
+© Marat Saytakov. Join my channel <a href='https://t.me/CitoyenMarat'>@CitoyenMarat</a> and twitter <a href='https://twitter.com/m4rr'>@m4rr</a>.
 """
 
 Keys = [ ['100 рублей', '1000 rubles', '5000 ₽'],
