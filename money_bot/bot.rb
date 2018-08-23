@@ -5,7 +5,23 @@ require 'telegram/bot'
 path = File.expand_path(File.dirname(__FILE__))
 load "#{path}/token.rb"
 
-Greet = "I am converting amounts in <b>$, €, ₽</b>. <i>(Based on Open Exchange Rates.)</i>\nAsk me “$1”. Or „100 ₽“."
+Greet = """
+Bot replies to messages containing amount & currency info.
+Converts $ and € to ₽, and back. Ask “$10k” or “100 000 RUB.”
+Doesn’t collect and/or store converstaions. Safely add her to a group chat.
+<a href='https://github.com/m4rr/money_bot'>Open source</a>. Uses Open Exchange Rates.
+
+© Marat Saytakov • <a href='https://m4rr.ru/'>m4rr.ru</a> • <a href='https://twitter.com/m4rr'>twitter.com/m4rr</a>
+
+★ ★ ★
+
+Бот отвечает на сообщения с ценой и валютой.
+Конвертирует $ и € в ₽, и обратно. Напишите „$10k“ или „100 000 рублей“.
+Не собирает и не хранит переписки. Свободно добавляйте в ваш международный групповой чат.
+Весь <a href='https://github.com/m4rr/money_bot'>код открыт</a>.
+
+Автор — Марат Сайтаков • <a href='https://m4rr.ru/'>m4rr.ru</a> • <a href='https://twitter.com/m4rr'>twitter.com/m4rr</a>
+"""
 Keys = [ ['100 рублей', '1000 rubles', '5000 ₽'],
          ['1 dollar', '$100', '$500', '$1000'  ],
          ['1 euro', '100 €', '500 €',  '1000 €'], ]
@@ -97,7 +113,7 @@ def parse_message message
   when '/start'
     result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: Keys, resize_keyboard: true, one_time_keyboard: false)
     result[:parse_mode] = 'HTML'
-    result[:text] = "Hi,\n#{Greet}"
+    result[:text] = "#{Greet}"
 
   when '/stop'
     result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardHide.new(hide_keyboard: true)
