@@ -21,7 +21,7 @@ def usd_base_json
   @json_storage
 end
 
-# currency string to symbol
+# currency text to symbol
 def detect_currency value
   case value.to_s.strip
   when /CAD|канадск/i
@@ -37,45 +37,57 @@ def detect_currency value
   end
 end
 
+def detect_amount(value, unit)
+  amount = value.delete(' _').sub(',', '.').to_f
+
+  case unit
+  when /mm|млрд|миллиард/i
+    amount *= 1_000_000_000
+  when /m|млн|лям|миллион/i
+    amount *= 1_000_000
+  when /k|к|тыщ|тыс/i
+    amount *= 1_000
+  end
+
+  amount
+end
+
 # format number to string with thousands separator
 def space_in number
   number.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1 ').reverse
 end
 
-# convert values in hash
-def convert hash
-  currency = detect_currency hash[:currency]
-  return nil if currency == :not_expected
+# convert values from given hash of `{ amount, unit, currency }`
+def convert_text hash
+  from_currency = detect_currency(hash[:currency])
+  return nil if from_currency == :not_expected
 
-  amount = (hash[:amount]).delete(' _').sub(',', '.').to_f
+  amount = detect_amount(hash[:amount], hash[:unit])
 
-  case hash[:unit]
-  when /mm|млрд|миллиард/i
-    amount *= 1_000_000_000
-  when /m|млн|миллион/i
-    amount *= 1_000_000
-  when /k|к|тыс/i
-    amount *= 1_000
+  rate = (usd_base_json['rates']['RUB']).to_f
+  return nil if rate == 0
+
+  if from_currency == :EUR
+    usd_eur_rate = (usd_base_json['rates']['EUR']).to_f
+    
+    rate /= usd_eur_rate
+  elsif from_currency == :CAD
+    usd_cad_rate = (usd_base_json['rates']['CAD']).to_f
+
+    rate /= usd_cad_rate
   end
+
+  result = from_currency == :RUB ? (amount / rate) : (amount * rate)
   
-  usdrub_rate = (usd_base_json['rates']['RUB']).to_f
-  usdeur_rate = (usd_base_json['rates']['EUR']).to_f
-  usdcad_rate = (usd_base_json['rates']['CAD']).to_f
+  to_currency = from_currency == :RUB ? :USD : :RUB
 
-  rate = usdrub_rate
-  rate = usdrub_rate / usdeur_rate if currency == :EUR
-  rate = usdrub_rate / usdcad_rate if currency == :CAD
-
-  change_currency = currency != :RUB ? :RUB : :USD
-  result = change_currency == :RUB ? (amount * rate) : (amount / rate)
-
-  if change_currency == :RUB && result < 100 || result < 10
+  if to_currency == :RUB && result < 100 || result < 10
     result = result.round(2)
   else
     result = result.round
   end
 
-  "#{space_in result} #{change_currency}"
+  "#{space_in result} #{to_currency}"
 end
 
 def parse_message message
@@ -92,12 +104,14 @@ def parse_message message
     result[:text] = "Si no, no." # https://ukraine.dirty.ru/aragono-katalonskaia-kliatva-vernosti-516221/
 
   # https://regexr.com/3uar8
-  when /([$€₽])?(\d+[ \d.,]*)(k|mm|m|тыс[а-я]{0,5}|к|млн|миллион[а-я]{0,3}|млрд|миллиард[а-я]{0,3})? ?([$€₽]|usd|dollar|eur|rub|cad|руб|доллар|бакс|евро|канадск[а-я]{0,5} доллар)?/i
-    result[:text] = convert({ amount: $2, unit: $3, currency: $1 || $4 })
+  when /([$€₽])?(\d+[ \d.,]*)(mm|m|k|к|тыщ|тыс[а-я]{0,4}|млн|лям[а-я]{0,2}|миллион[а-я]{0,2}|млрд|миллиард[а-я]{0,2})? ?([$€₽]|usd|dollar|eur|rub|cad|руб|доллар|бакс|евро|канадск[а-я]{0,2} доллар)?/i
+    result[:text] = convert_text({ amount: $2, unit: $3, currency: $1 || $4 })
 
   end
 
-  result[:reply_to_message_id] = message.message_id if Time.now.to_i - message.date >= 30 # respond with reply if timeout
+  if Time.now.to_i - message.date >= 30 # respond with reply if timeout
+    result[:reply_to_message_id] = message.message_id 
+  end
 
   result if !result[:text].nil?
 end
