@@ -116,7 +116,7 @@ def parse_message message
     result[:text] = Greet
 
   when '/stop'
-    result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardHide.new(hide_keyboard: true)
+    result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardHide.new(remove_keyboard: true)
     result[:text] = "Ok, thanks."
 
   # https://regexr.com/3uar8
@@ -125,9 +125,8 @@ def parse_message message
 
   end
 
-  if Time.now.to_i - message.date >= 30 # respond with reply if timeout
-    result[:reply_to_message_id] = message.message_id 
-  end
+  # respond with reply if timeout
+  result[:reply_to_message_id] = message.message_id if Time.now.to_i - message.date >= 30
 
   result if !result[:text].nil?
 end
