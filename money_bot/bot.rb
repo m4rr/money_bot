@@ -25,7 +25,7 @@ Freely add her to group chats. Doesn’t collect and/or store converstaions. Use
 Author: Marat Saytakov. Join my channel <a href='https://t.me/CitoyenMarat'>@CitoyenMarat</a> and twitter <a href='https://twitter.com/m4rr'>@m4rr</a>.
 """
 
-# check currencies on OXR
+# check open exchange rates or return cached
 def usd_base_json
   if @last_check.nil? || Time.now.to_i - @last_check.to_i > 30 * 60
     oxr_latest_uri = URI.parse("https://openexchangerates.org/api/latest.json?app_id=#{OXR_APP_ID}")
@@ -33,10 +33,10 @@ def usd_base_json
     @json_storage = JSON.parse(oxr_response.body)
     @last_check = Time.now
   end
+
   @json_storage
 end
 
-# currency text to symbol
 def detect_currency value
   case value.to_s.strip
   when /CAD|канадск/i
@@ -67,31 +67,34 @@ def detect_amount(value, unit)
   amount
 end
 
-# format number to string with thousands separator
+def detect_rate from_currency
+  rate = usd_base_json['rates']['RUB'].to_f
+
+  if from_currency == :EUR
+    usd_eur_rate = usd_base_json['rates']['EUR'].to_f
+    rate /= usd_eur_rate
+  elsif from_currency == :CAD
+    usd_cad_rate = usd_base_json['rates']['CAD'].to_f
+    rate /= usd_cad_rate
+  end
+
+  rate
+end
+
+# 1000000 to 1 000 000
 def space_in number
   number.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1 ').reverse
 end
 
 # convert values from given hash of `{ amount, unit, currency }`
 def convert_text hash
-  from_currency = detect_currency(hash[:currency])
+  from_currency = detect_currenc hash[:currency]
   return nil if from_currency == :not_expected
 
-  amount = detect_amount(hash[:amount], hash[:unit])
-
-  rate = (usd_base_json['rates']['RUB']).to_f
+  rate = detect_rate from_currency
   return nil if rate == 0
-
-  if from_currency == :EUR
-    usd_eur_rate = (usd_base_json['rates']['EUR']).to_f
-    
-    rate /= usd_eur_rate
-  elsif from_currency == :CAD
-    usd_cad_rate = (usd_base_json['rates']['CAD']).to_f
-
-    rate /= usd_cad_rate
-  end
-
+  
+  amount = detect_amount(hash[:amount], hash[:unit])
   result = from_currency == :RUB ? (amount / rate) : (amount * rate)
   
   to_currency = from_currency == :RUB ? :USD : :RUB
