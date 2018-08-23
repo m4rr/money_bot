@@ -5,25 +5,25 @@ require 'telegram/bot'
 path = File.expand_path(File.dirname(__FILE__))
 load "#{path}/token.rb"
 
+Keys = [['100 рублей', '1000 rubles', '5000 ₽'],
+        ['1 dollar', '$100', '$500', '$1000'  ],
+        ['1 euro', '100 €', '500 €',  '1000 €'],]
+
 Greet = """
-Бот отвечает на сообщения с ценой и валютой. Конвертирует <b>$ и € в ₽</b>, и обратно. Напишите „<b>$10k</b>“ или „<b>100 000 рублей</b>“.
+Бот отвечает на сообщения с ценой и валютой. Конвертирует <b>$ и € в рубли</b>, и обратно. Напишите „<b>$10k</b>“ или „<b>100 000 рублей</b>“.
 
-Не собирает и не хранит переписки. Свободно добавляйте в групповые чаты. Весь <a href='https://github.com/m4rr/money_bot'>код открыт</a>.
+Свободно добавляйте в групповые чаты. Не собирает и не хранит переписки. Весь <a href='https://github.com/m4rr/money_bot'>код открыт</a>.
 
-Автор — Марат Сайтаков. Подписывайтесь на мой канал <a href='https://t.me/CitoyenMarat'>@CitoyenMarat</a> и твиттер <a href='https://twitter.com/m4rr'>@m4rr</a>.
+Автор: Марат Сайтаков. Подписывайтесь на мой канал <a href='https://t.me/CitoyenMarat'>@CitoyenMarat</a> и твиттер <a href='https://twitter.com/m4rr'>@m4rr</a>.
 
 * * *
 
-Bot replies to messages containing amount & currency info. Converts <b>$ and € to ₽</b>, and back. Ask “<b>$10k</b>” or “<b>100 000 RUB</b>.”
+Bot replies to messages containing amount & currency info. Converts <b>$ and € to rubles</b>, and back. Ask “<b>$10k</b>” or “<b>100 000 RUB</b>.”
 
-Doesn’t collect and/or store converstaions. Freely add her to group chats. Uses Open Exchange Rates. <a href='https://github.com/m4rr/money_bot'>Open source</a>.
+Freely add her to group chats. Doesn’t collect and/or store converstaions. Uses Open Exchange Rates. <a href='https://github.com/m4rr/money_bot'>Open source</a>.
 
-© Marat Saytakov. Join my channel <a href='https://t.me/CitoyenMarat'>@CitoyenMarat</a> and twitter <a href='https://twitter.com/m4rr'>@m4rr</a>.
+Author: Marat Saytakov. Join my channel <a href='https://t.me/CitoyenMarat'>@CitoyenMarat</a> and twitter <a href='https://twitter.com/m4rr'>@m4rr</a>.
 """
-
-Keys = [ ['100 рублей', '1000 rubles', '5000 ₽'],
-         ['1 dollar', '$100', '$500', '$1000'  ],
-         ['1 euro', '100 €', '500 €',  '1000 €'], ]
 
 # check currencies on OXR
 def usd_base_json
