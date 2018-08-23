@@ -6,22 +6,21 @@ path = File.expand_path(File.dirname(__FILE__))
 load "#{path}/token.rb"
 
 Greet = """
-Bot replies to messages containing amount & currency info.
-Converts $ and € to ₽, and back. Ask “$10k” or “100 000 RUB.”
-Doesn’t collect and/or store converstaions. Safely add her to a group chat.
-<a href='https://github.com/m4rr/money_bot'>Open source</a>. Uses Open Exchange Rates.
+Бот отвечает на сообщения с ценой и валютой. Конвертирует $ и € в ₽, и обратно. Напишите „$10k“ или „100 000 рублей“.
 
-© Marat Saytakov • <a href='https://m4rr.ru/'>m4rr.ru</a> • <a href='https://twitter.com/m4rr'>twitter.com/m4rr</a>
+Не собирает и не хранит переписки. Свободно добавляйте в ваш международный групповой чат. Весь <a href='https://github.com/m4rr/money_bot'>код открыт</a>.
 
-★ ★ ★
+Автор — Марат Сайтаков. Подписывайтесь на мой канал <a href='https://t.me/CitoyenMarat'>@CitoyenMarat</a> и твиттер @<a href='https://twitter.com/m4rr'>m4rr</a>.
 
-Бот отвечает на сообщения с ценой и валютой.
-Конвертирует $ и € в ₽, и обратно. Напишите „$10k“ или „100 000 рублей“.
-Не собирает и не хранит переписки. Свободно добавляйте в ваш международный групповой чат.
-Весь <a href='https://github.com/m4rr/money_bot'>код открыт</a>.
+* * *
 
-Автор — Марат Сайтаков • <a href='https://m4rr.ru/'>m4rr.ru</a> • <a href='https://twitter.com/m4rr'>twitter.com/m4rr</a>
+Bot replies to messages containing amount & currency info. Converts $ and € to ₽, and back. Ask “$10k” or “100 000 RUB.”
+
+Doesn’t collect and/or store converstaions. Safely add her to a group chat. Uses Open Exchange Rates. <a href='https://github.com/m4rr/money_bot'>Open source</a>.
+
+© Marat Saytakov. Join my channel <a href='https://t.me/CitoyenMarat'>@CitoyenMarat</a> and twitter @<a href='https://twitter.com/m4rr'>m4rr</a>.
 """
+
 Keys = [ ['100 рублей', '1000 rubles', '5000 ₽'],
          ['1 dollar', '$100', '$500', '$1000'  ],
          ['1 euro', '100 €', '500 €',  '1000 €'], ]
@@ -112,12 +111,13 @@ def parse_message message
   case message.text
   when '/start'
     result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: Keys, resize_keyboard: true, one_time_keyboard: false)
+    result[:disable_web_page_preview] = true
     result[:parse_mode] = 'HTML'
-    result[:text] = "#{Greet}"
+    result[:text] = Greet
 
   when '/stop'
     result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardHide.new(hide_keyboard: true)
-    result[:text] = "Si no, no." # https://ukraine.dirty.ru/aragono-katalonskaia-kliatva-vernosti-516221/
+    result[:text] = "Ok, thanks."
 
   # https://regexr.com/3uar8
   when /([$€₽])?(\d+[ \d.,]*)(mm|m|k|к|тыщ|тыс[а-я]{0,4}|млн|лям[а-я]{0,2}|миллион[а-я]{0,2}|млрд|миллиард[а-я]{0,2})? ?([$€₽]|usd|dollar|eur|rub|cad|руб|доллар|бакс|евро|канадск[а-я]{0,2} доллар)?/i
