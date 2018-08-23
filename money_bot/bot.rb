@@ -88,7 +88,7 @@ end
 
 # convert values from given hash of `{ amount, unit, currency }`
 def convert_text hash
-  from_currency = detect_currenc hash[:currency]
+  from_currency = detect_currency hash[:currency]
   return nil if from_currency == :not_expected
 
   rate = detect_rate from_currency
