@@ -117,7 +117,7 @@ def parse_message message
 
   when '/stop'
     result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true)
-    result[:text] = "Ok, thanks."
+    result[:text] = "Клавиатура убрана.\n\n* * *\n\nKeyboard has been removed."
 
   # https://regexr.com/3uar8
   when /([$€₽])?(\d+[ \d.,]*)(mm|m|k|к|тыщ|тыс[а-я]{0,4}|млн|лям[а-я]{0,2}|миллион[а-я]{0,2}|млрд|миллиард[а-я]{0,2})? ?([$€₽]|usd|dollar|eur|rub|cad|руб|доллар|бакс|евро|канадск[а-я]{0,2} доллар)?/i
