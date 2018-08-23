@@ -116,7 +116,7 @@ def parse_message message
     result[:text] = Greet
 
   when '/stop'
-    result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardHide.new(remove_keyboard: true)
+    result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true)
     result[:text] = "Ok, thanks."
 
   # https://regexr.com/3uar8
