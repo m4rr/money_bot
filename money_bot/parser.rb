@@ -20,8 +20,12 @@ def parse_currency value
     :USD
   when /€|EUR|евро/i
     :EUR
+  when /£|GBP|фунт/i
+    :GBP
   when /₽|RUB|руб/i
     :RUB
+  when /฿|THB|бат|BHT/i
+    :THB
   else
     :not_expected
   end
@@ -45,13 +49,13 @@ end
 def parse_rate from_currency
   rate = usd_base_json['rates']['RUB'].to_f
 
-  if from_currency == :EUR
-    usd_eur_rate = usd_base_json['rates']['EUR'].to_f
-    rate /= usd_eur_rate
-  elsif from_currency == :CAD
-    usd_cad_rate = usd_base_json['rates']['CAD'].to_f
-    rate /= usd_cad_rate
+  if from_currency == :USD || from_currency == :RUB
+    return rate
   end
+
+  # other currencies
+  usd_based_rate = usd_base_json['rates'][from_currency.to_s].to_f
+  rate /= usd_based_rate
 
   rate
 end
@@ -68,10 +72,10 @@ def convert_values hash
 
   rate = parse_rate from_currency
   return nil if rate == 0
-  
+
   amount = parse_amount(hash[:amount], hash[:unit])
   result = from_currency == :RUB ? (amount / rate) : (amount * rate)
-  
+
   to_currency = from_currency == :RUB ? :USD : :RUB
 
   if to_currency == :RUB && result < 10 || result < 1
