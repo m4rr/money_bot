@@ -15,7 +15,7 @@ def usd_base_json
     @json_storage = JSON.parse(oxr_response.body)
     @last_check = Time.now
   end
-  
+
   @json_storage
 end
 

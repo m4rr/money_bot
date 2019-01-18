@@ -95,6 +95,8 @@ def parse_text text
     :start
   when '/stop'
     :stop
+  when 'гугол'
+    'Ираклий, ну хватит!'
   # https://regexr.com/3uar8
   when /-?([$€₽])?(\d+[ \d.,]*)(mm|m|k|к|тыщ|тыс[а-я]{0,4}|млн|лям[а-я]{0,2}|миллион[а-я]{0,2}|млрд|миллиард[а-я]{0,2})? ?([$€₽฿£]|usd|dollar|eur|rub|cad|thb|bht|бат|GBP|фунт|руб|доллар|бакс|евро|канадск[а-я]{0,2} доллар)?/i
     convert_values({ amount: $2, unit: $3, currency: $1 || $4 })
