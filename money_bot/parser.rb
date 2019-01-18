@@ -79,8 +79,10 @@ def convert_values hash
   to_currency = from_currency == :RUB ? :USD : :RUB
 
   if to_currency == :RUB && result < 10 || result < 1
+    # round to .000 if valuable < 1
     result = result.round(3)
   elsif to_currency == :RUB && result < 100 || result < 10
+    # round to .00 if valuable < 10
     result = result.round(2)
   else
     result = result.round
