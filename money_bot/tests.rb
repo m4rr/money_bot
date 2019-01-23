@@ -184,6 +184,7 @@ def run_tests
 
   result = true
 
+  result &= parse_text("1 ляе").to_i < parse_text("$10 mm ").to_i
   result &= parse_text("1 тенге").to_i < parse_text("$10 mm ").to_i
   result &= parse_text("1 KZT").to_i < parse_text("$10 mm ").to_i
   result &= parse_text("1 KRW").to_i < parse_text("$10 mm ").to_i

@@ -73,12 +73,14 @@ end
 def convert_values hash
   from_currency = parse_currency(hash[:currency])
   return nil if from_currency == :not_expected
+  return nil if from_currency == nil
 
   rate = parse_rate from_currency
   return nil if rate == 0
 
   amount = parse_amount(hash[:amount], hash[:unit])
   result = from_currency == :RUB ? (amount / rate) : (amount * rate)
+  return nil if !result.finite?
 
   to_currency = from_currency == :RUB ? :USD : :RUB
 
@@ -105,7 +107,6 @@ def parse_text text
     'Ираклий, ну хватит!'
   # https://regexr.com/3uar8
   when /-?([$€₽])?(\d+[ \d.,]*)(mm|m(?!\w)|k(?!\w)|к|тыщ|тыс[а-я]{0,4}|млн|лям[а-я]{0,2}|миллион[а-я]{0,2}|млрд|миллиард[а-я]{0,2})? ?([$€₽฿£]|usd|dollar|eur|rub|cad|thb|bht|бат|GBP|фунт|руб|доллар|бакс|евро|канадск[а-я]{0,2} доллар|kzt|тенге|krw|myr|рингг?ит)?/i
-    puts text
     convert_values({ amount: $2, unit: $3, currency: $1 || $4 })
   end
 end
