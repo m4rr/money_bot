@@ -29,15 +29,12 @@ Greet = """
 Свободно добавляйте в групповые чаты. Не собирает и не хранит переписки. Весь <a href='https://github.com/m4rr/money_bot'>код открыт</a>.
 
 Автор: Марат Сайтаков. Подписывайтесь на мой канал <a href='https://t.me/CitoyenMarat'>@CitoyenMarat</a> и твиттер <a href='https://twitter.com/m4rr'>@m4rr</a>.
-
-* * *
-
-Bot replies to messages containing amount & currency info. Converts <b>$ and € to rubles</b>, and back. Ask “<b>$10k</b>” or “<b>100 000 RUB</b>.”
-
-Freely add her to group chats. Doesn’t collect and/or store converstaions. Uses Open Exchange Rates. <a href='https://github.com/m4rr/money_bot'>Open source</a>.
-
-Author: Marat Saytakov. Join my channel <a href='https://t.me/CitoyenMarat'>@CitoyenMarat</a> and twitter <a href='https://twitter.com/m4rr'>@m4rr</a>.
 """
+
+# * * *
+# Bot replies to messages containing amount & currency info. Converts <b>$ and € to rubles</b>, and back. Ask “<b>$10k</b>” or “<b>100 000 RUB</b>.”
+# Freely add her to group chats. Doesn’t collect and/or store converstaions. Uses Open Exchange Rates. <a href='https://github.com/m4rr/money_bot'>Open source</a>.
+# Author: Marat Saytakov. Join my channel <a href='https://t.me/CitoyenMarat'>@CitoyenMarat</a> and twitter <a href='https://twitter.com/m4rr'>@m4rr</a>.
 
 def parse_message message
   result = { chat_id: message.chat.id }

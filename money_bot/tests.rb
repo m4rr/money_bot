@@ -188,6 +188,7 @@ def run_tests
   result &= parse_text("1 тенге").to_i < parse_text("$10 mm ").to_i
   result &= parse_text("1 KZT").to_i < parse_text("$10 mm ").to_i
   result &= parse_text("1 KRW").to_i < parse_text("$10 mm ").to_i
+  result &= parse_text("1 krw") == '0.059 RUB'
   result &= parse_text("1 MYR").to_i < parse_text("$10 mm ").to_i
 
   result &= handle_thousands_separtor("1,000,000.01") == 1000000.01
