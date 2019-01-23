@@ -13,25 +13,32 @@ def handle_thousands_separtor value
 end
 
 def parse_currency value
+  # match aliases
   case value.to_s.strip
-  when /CAD|канадск/i
+  when /канадск/i
     :CAD
-  when /\$|USD|dollar|доллар|бакс/i
+  when /\$|dollar|доллар|бакс/i
     :USD
-  when /€|EUR|евро/i
+  when /€|евро/i
     :EUR
-  when /£|GBP|фунт/i
+  when /£|фунт/i
     :GBP
-  when /₽|RUB|руб/i
+  when /₽|руб/i
     :RUB
-  when /฿|THB|бат|BHT/i
+  when /฿|бат|BHT/i
     :THB
-  when /KZT|тенге/i
+  when /тенге/i
     :KZT
-  when /MYR|рингг?ит/i
+  when /рингг?ит/i
     :MYR
   else
-    value.to_s.strip.to_sym
+    cur = value.to_s.strip.upcase
+    if usd_base_json['rates'][cur].nil?
+      :not_expected
+    else
+      # any currencies matched by ALPHA3 - pass
+      cur.to_sym
+    end
   end
 end
 
