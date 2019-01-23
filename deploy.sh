@@ -11,8 +11,8 @@ ssh rails '
   echo SSH connecting...
   cd ~/telegrambot/money_bot/
   git pull
-  docker build -t m4rr/money_bot .
   docker kill "$(docker ps -q --filter ancestor=m4rr/money_bot | grep \w* | head -1)"
+  docker build -t m4rr/money_bot .
   docker run -d --restart=always m4rr/money_bot
   docker ps
   echo exitting...
