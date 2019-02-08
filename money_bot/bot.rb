@@ -40,7 +40,6 @@ Greet = """
 def parse_message message
   result = { chat_id: message.chat.id }
 
-  parsed = parse_text(message.text)
 
   happy_bday = [
     "Божена! Ты самая обаятельная и привлекательная.",
@@ -59,6 +58,12 @@ def parse_message message
     "Божена! Однажды Небо и Земля поспорили, кто из них красивее. И тогда, что бы доказать свою красоту, небо показало звезды, а Земля показала тебя!",
   ]
 
+  if message.chat.title == "тест-марат-ираклий" # message.from.username == "maratacrobat" # "pearl_hush"
+    result[:text] = happy_bday[Random.new.rand(0..happy_bday.count-1)]
+  end # if
+
+  parsed = parse_text(message.text)
+
   case parsed
   when :start
     result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: Keys, resize_keyboard: true, one_time_keyboard: false)
@@ -68,11 +73,8 @@ def parse_message message
   when :stop
     result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true)
     result[:text] = "Клавиатура убрана.\n\n* * *\n\nKeyboard has been removed."
-
-  when message.chat.title == "тест-марат-ираклий" # message.from.username == "maratacrobat" # "pearl_hush"
-    result[:text] = happy_bday[Random.new.rand(0..happy_bday.count-1)]
   else
-    result[:text] = parsed
+    result[:text] = parsed if !parsed.nil?
   end
 
   # respond with reply if timeout
