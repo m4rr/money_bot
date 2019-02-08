@@ -80,13 +80,13 @@ def parse_message message
     "https://bipbap.ru/wp-content/uploads/2017/08/1473780855_29.jpg",
   ]
 
-  if message.chat.title == "тест-марат-ираклий" # message.from.username == "maratacrobat" # "pearl_hush"
+  if message.chat.title == "тест-марат-ираклий" || message.from.username == "pearl_hush"
     rmax = happy_bday.count * 3
     rnum = Random.rand(0..rmax)
     if rnum < happy_bday.count
       result[:text] = happy_bday[Random.rand(0..rnum)]
     else
-      result[:text] = rnum.to_s + " / " + happy_bday.count.to_s
+      # result[:text] = rnum.to_s + " / " + happy_bday.count.to_s
     end
   end # if
 
