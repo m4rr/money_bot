@@ -42,6 +42,23 @@ def parse_message message
 
   parsed = parse_text(message.text)
 
+  happy_bday = [
+    "Божена! Ты самая обаятельная и привлекательная.",
+
+    "Божена! Все мужчины оборачиваются и смотрят тебе вслед безумными глазами.",
+
+    "Божена! Мужчины будут счастливы, если ты их одаришь мимолетным взглядом, улыбкой.",
+
+    "Божена! У тебя стройная фигура, красивые ноги, грациозная походка, чарующий взгляд.",
+
+
+    "Божена! Твои родители случайно не садовники? Нет? Тогда откуда у них такой цветок?",
+
+    "Божена! Тут звонили из рая и сказали, что у них сбежал самый красивый ангел, но мы тебя не выдали!",
+
+    "Божена! Однажды Небо и Земля поспорили, кто из них красивее. И тогда, что бы доказать свою красоту, небо показало звезды, а Земля показала тебя!",
+  ]
+
   case parsed
   when :start
     result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: Keys, resize_keyboard: true, one_time_keyboard: false)
@@ -51,6 +68,9 @@ def parse_message message
   when :stop
     result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true)
     result[:text] = "Клавиатура убрана.\n\n* * *\n\nKeyboard has been removed."
+
+  when message.chat.title == "тест-марат-ираклий" # message.from.username == "maratacrobat" # "pearl_hush"
+    result[:text] = happy_bday[Random.new.rand(0..happy_bday.count-1)]
   else
     result[:text] = parsed
   end
