@@ -56,6 +56,28 @@ def parse_message message
     "Божена! Тут звонили из рая и сказали, что у них сбежал самый красивый ангел, но мы тебя не выдали!",
 
     "Божена! Однажды Небо и Земля поспорили, кто из них красивее. И тогда, что бы доказать свою красоту, небо показало звезды, а Земля показала тебя!",
+
+    "С ДНЕМ РОЖДЕНИЯ, БОЖЕНА!",
+
+    "Счастья, радости, здоровья,
+    Мира, нежности с любовью,
+    Процветать и долго жить
+    Я желаю от души!",
+
+    "Всех чудес, что есть на свете,
+    Доброты, тепла и света,
+    Волшебства и вдохновения —
+    Поздравляю с днём рождения!",
+
+    "https://bipbap.ru/wp-content/uploads/2017/08/1-8.jpg",
+    "https://bipbap.ru/wp-content/uploads/2017/08/3-4.jpg",
+    "https://bipbap.ru/wp-content/uploads/2017/08/7cbe89ef1c58a9645ddef23ada6f79cc.jpg",
+    "https://bipbap.ru/wp-content/uploads/2017/08/7eb41d_preview.jpg",
+    "https://bipbap.ru/wp-content/uploads/2017/08/54b77bba7c4ae_4461322_m.jpg",
+    "https://bipbap.ru/wp-content/uploads/2017/08/81da624aa24f42c21f0d217290eb860b.jpg",
+    "https://bipbap.ru/wp-content/uploads/2017/08/5848-otkritki-Otkritka-kartinka-s-dnem-rozhdeniya-pozdravlenie-s-dnyom-rozhdeniya-den-rozhdeniya-buket-korotkie-stihi.jpg",
+    "https://bipbap.ru/wp-content/uploads/2017/08/22439308.jpg",
+    "https://bipbap.ru/wp-content/uploads/2017/08/135760840_6ba634095fe6.jpg",
   ]
 
   if message.chat.title == "тест-марат-ираклий" # message.from.username == "maratacrobat" # "pearl_hush"
