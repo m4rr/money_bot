@@ -78,10 +78,12 @@ def parse_message message
     "https://bipbap.ru/wp-content/uploads/2017/08/5848-otkritki-Otkritka-kartinka-s-dnem-rozhdeniya-pozdravlenie-s-dnyom-rozhdeniya-den-rozhdeniya-buket-korotkie-stihi.jpg",
     "https://bipbap.ru/wp-content/uploads/2017/08/22439308.jpg",
     "https://bipbap.ru/wp-content/uploads/2017/08/135760840_6ba634095fe6.jpg",
+    "https://bipbap.ru/wp-content/uploads/2017/08/1473780855_29.jpg",
+
   ]
 
   if message.chat.title == "тест-марат-ираклий" # message.from.username == "maratacrobat" # "pearl_hush"
-    result[:text] = happy_bday[Random.new.rand(0..happy_bday.count-1)]
+    result[:text] = happy_bday[Random.rand(0..happy_bday.count-1)]
   end # if
 
   parsed = parse_text(message.text)
@@ -95,6 +97,7 @@ def parse_message message
   when :stop
     result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true)
     result[:text] = "Клавиатура убрана.\n\n* * *\n\nKeyboard has been removed."
+    happy_bday = []
   else
     result[:text] = parsed if !parsed.nil?
   end
