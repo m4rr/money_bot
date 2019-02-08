@@ -50,7 +50,6 @@ def parse_message message
 
     "Божена! У тебя стройная фигура, красивые ноги, грациозная походка, чарующий взгляд.",
 
-
     "Божена! Твои родители случайно не садовники? Нет? Тогда откуда у них такой цветок?",
 
     "Божена! Тут звонили из рая и сказали, что у них сбежал самый красивый ангел, но мы тебя не выдали!",
@@ -79,11 +78,16 @@ def parse_message message
     "https://bipbap.ru/wp-content/uploads/2017/08/22439308.jpg",
     "https://bipbap.ru/wp-content/uploads/2017/08/135760840_6ba634095fe6.jpg",
     "https://bipbap.ru/wp-content/uploads/2017/08/1473780855_29.jpg",
-
   ]
 
   if message.chat.title == "тест-марат-ираклий" # message.from.username == "maratacrobat" # "pearl_hush"
-    result[:text] = happy_bday[Random.rand(0..happy_bday.count-1)]
+    rmax = happy_bday.count * 3
+    rnum = Random.rand(0..rmax)
+    if rnum < happy_bday.count
+      result[:text] = happy_bday[Random.rand(0..rnum)]
+    else
+      result[:text] = rnum.to_s + " / " + happy_bday.count.to_s
+    end
   end # if
 
   parsed = parse_text(message.text)
