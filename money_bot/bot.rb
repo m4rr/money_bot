@@ -82,9 +82,7 @@ def parse_message message
     "https://bipbap.ru/wp-content/uploads/2017/08/1473780855_29.jpg",
   ]
 
-  puts message.from.username
-
-  if message.from.username == "pearl_hush" || message.chat.title == "тест-марат-ираклий" && message.from.username == "maratacrobat"
+  if  message.chat.title == "тест-марат-ираклий" && message.from.username == "maratacrobat"
     rmax = happy_bday.count * 1
     rnum = Random.rand(0..rmax)
     if rnum < happy_bday.count
