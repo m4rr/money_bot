@@ -3,6 +3,8 @@ require 'net/http'
 require 'telegram/bot'
 require 'uri'
 
+$stdout.sync = true
+
 path = File.expand_path(File.dirname(__FILE__))
 load "#{path}/token.rb"
 load "#{path}/parser.rb"
