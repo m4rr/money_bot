@@ -87,7 +87,7 @@ def parse_message message
     rmax = happy_bday.count * 1
     rnum = Random.rand(0..rmax-1)
     if rnum < happy_bday.count
-      result[:text] = message.from.to_s # happy_bday[Random.rand(0..rnum)]
+      result[:text] = happy_bday[Random.rand(0..rnum)]
     else
       # result[:text] = rnum.to_s + " / " + happy_bday.count.to_s
     end
