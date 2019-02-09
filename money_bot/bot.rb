@@ -84,7 +84,7 @@ def parse_message message
 
 
   if message.from.username == "pearl_hush" || message.chat.title == "тест-марат-ираклий"
-    rmax = happy_bday.count * 1
+    rmax = happy_bday.count * 3
     rnum = Random.rand(0..rmax-1)
     if rnum < happy_bday.count
       result[:text] = happy_bday[Random.rand(0..rnum)]
