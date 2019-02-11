@@ -70,10 +70,10 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
     if !parameters.nil? && !parameters.empty?
       begin
         bot.api.send_message(parameters)
-        bot.api.send_message({ chat_id: "@maratacrobat", text: "hi" })
+        bot.api.send_message({ chat_id: "@usdrubbotsupport", text: "hi" })
       rescue => exception
         puts exception
-        bot.api.send_message({ chat_id: "@maratacrobat", text: exception.to_s })
+        bot.api.send_message({ chat_id: "@usdrubbotsupport", text: exception.to_s })
       end
     end
   end
