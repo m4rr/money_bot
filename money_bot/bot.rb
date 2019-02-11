@@ -74,11 +74,11 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
       begin
         bot.api.send_message(parameters)
         number_of_messages_sent += 1
-        if Time.now.to_i - last_update.to_i > 30 * 60
+        # if Time.now.to_i - last_update.to_i > 30 * 60
           bot.api.send_message({ chat_id: "@usdrubbotsupport",
-                                 text: last_update.to_s + "\n" + Time.now + "\n" + number_of_messages_sent.to_s + "msgs" })
+                                 text: last_update + "\n" + Time.now + "\n" + number_of_messages_sent.to_s + "msgs" })
           last_update = Time.now
-        end
+        # end
       rescue => exception
         puts exception
         bot.api.send_message({ chat_id: "@usdrubbotsupport", text: exception.to_s })
