@@ -64,7 +64,7 @@ def parse_message message
   result if !result[:text].nil?
 end
 
-number_of_messages_sent = 0
+number_of_msgs_sent = 0
 last_update = Time.now
 
 Telegram::Bot::Client.run(TOKEN) do |bot|
