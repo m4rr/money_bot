@@ -42,57 +42,6 @@ Greet = """
 def parse_message message
   result = { chat_id: message.chat.id }
 
-
-  happy_bday = [
-    "Божена! Ты самая обаятельная и привлекательная.",
-
-    "Божена! Все мужчины оборачиваются и смотрят тебе вслед безумными глазами.",
-
-    "Божена! Мужчины будут счастливы, если ты их одаришь мимолетным взглядом, улыбкой.",
-
-    "Божена! У тебя стройная фигура, красивые ноги, грациозная походка, чарующий взгляд.",
-
-    "Божена! Твои родители случайно не садовники? Нет? Тогда откуда у них такой цветок?",
-
-    "Божена! Тут звонили из рая и сказали, что у них сбежал самый красивый ангел, но мы тебя не выдали!",
-
-    "Божена! Однажды Небо и Земля поспорили, кто из них красивее. И тогда, что бы доказать свою красоту, небо показало звезды, а Земля показала тебя!",
-
-    "С ДНЕМ РОЖДЕНИЯ, БОЖЕНА!",
-
-    "Счастья, радости, здоровья,
-    Мира, нежности с любовью,
-    Процветать и долго жить
-    Я желаю от души!",
-
-    "Всех чудес, что есть на свете,
-    Доброты, тепла и света,
-    Волшебства и вдохновения —
-    Поздравляю с днём рождения!",
-
-    "https://bipbap.ru/wp-content/uploads/2017/08/1-8.jpg",
-    "https://bipbap.ru/wp-content/uploads/2017/08/3-4.jpg",
-    "https://bipbap.ru/wp-content/uploads/2017/08/7cbe89ef1c58a9645ddef23ada6f79cc.jpg",
-    "https://bipbap.ru/wp-content/uploads/2017/08/7eb41d_preview.jpg",
-    "https://bipbap.ru/wp-content/uploads/2017/08/54b77bba7c4ae_4461322_m.jpg",
-    "https://bipbap.ru/wp-content/uploads/2017/08/81da624aa24f42c21f0d217290eb860b.jpg",
-    "https://bipbap.ru/wp-content/uploads/2017/08/5848-otkritki-Otkritka-kartinka-s-dnem-rozhdeniya-pozdravlenie-s-dnyom-rozhdeniya-den-rozhdeniya-buket-korotkie-stihi.jpg",
-    "https://bipbap.ru/wp-content/uploads/2017/08/22439308.jpg",
-    "https://bipbap.ru/wp-content/uploads/2017/08/135760840_6ba634095fe6.jpg",
-    "https://bipbap.ru/wp-content/uploads/2017/08/1473780855_29.jpg",
-  ]
-
-
-  if message.from.username == "pearl_hush" || message.chat.title == "тест-марат-ираклий"
-    rmax = happy_bday.count * 0
-    rnum = Random.rand(0..rmax-1)
-    if rnum < happy_bday.count
-      # result[:text] = happy_bday[Random.rand(0..rnum)]
-    else
-      # result[:text] = rnum.to_s + " / " + happy_bday.count.to_s
-    end
-  end # if
-
   parsed = parse_text(message.text)
 
   case parsed
