@@ -68,7 +68,11 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
   bot.listen do |message|
     parameters = parse_message(message)
     if !parameters.nil? && !parameters.empty?
-      bot.api.send_message(parameters)
+      begin
+        bot.api.send_message(parameters)
+      rescue => exception
+        puts exception
+      end
     end
   end
 end
