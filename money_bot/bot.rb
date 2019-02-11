@@ -64,12 +64,19 @@ def parse_message message
   result if !result[:text].nil?
 end
 
+number_of_messages_sent = 0
+last_update = Time.now
+
 Telegram::Bot::Client.run(TOKEN) do |bot|
   bot.listen do |message|
     parameters = parse_message(message)
     if !parameters.nil? && !parameters.empty?
       begin
         bot.api.send_message(parameters)
+        number_of_messages_sent += 1
+        # if Time.now.to_i - last_update.to_i > 30 * 60
+          bot.api.send_message({ chat_id: "@usdrubbotsupport", text: last_update.to_s + ": " + number_of_messages_sent.to_s })
+        # end
       rescue => exception
         puts exception
         bot.api.send_message({ chat_id: "@usdrubbotsupport", text: exception.to_s })
