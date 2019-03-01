@@ -30,7 +30,9 @@ Greet = """
 
 Свободно добавляйте в групповые чаты. Не собирает и не хранит переписку. [Открытый](https://github.com/m4rr/money_bot) исходный код.
 
-Подписывайтесь на мой канал [@CitoyenMarat](https://t.me/CitoyenMarat) и твиттер [@m4rr](https://twitter.com/m4rr).
+Подписывайтесь на мой канал @CitoyenMarat и твиттер [@m4rr](https://twitter.com/m4rr).
+
+Группа поддержки: @usdrubBotSupport
 
 © Марат Сайтаков.
 """
