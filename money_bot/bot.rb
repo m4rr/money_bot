@@ -31,8 +31,6 @@ Greet = """
 Добавляйте бота в групповые чаты, это очень удобно! Бот не собирает и не хранит переписку. [Открытый](https://github.com/m4rr/money_bot) исходный код.
 
 Подписывайтесь на мой канал @CitoyenMarat и твиттер [@m4rr](https://twitter.com/m4rr).
-
-Группа поддержки: @usdrubBotSupport
 """
 
 # Bot replies to messages containing amount & currency info. Converts <b>$ and € to rubles</b>, and back. Ask “<b>$10k</b>” or “<b>100 000 RUB</b>.”
