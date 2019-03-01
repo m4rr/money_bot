@@ -26,11 +26,11 @@ Keys = [['100 рублей', '1000 rubles', '5000 ₽'],
         ['1 euro', '100 €', '500 €',  '1000 €'],]
 
 Greet = """
-Бот отвечает на сообщения с ценой и валютой. Конвертирует <b>$ и € в рубли</b>, и обратно. Напишите „<b>$10k</b>“ или „<b>100 000 рублей</b>“.
+Бот отвечает на сообщения с ценой и валютой. Переводит рубли в доллары, а все остальные валюты — в рубли. Напишите “`$10k`” или «`100 000 рублей`» — и посмотрите сами!
 
-Свободно добавляйте в групповые чаты. Не собирает и не хранит переписки. Весь <a href='https://github.com/m4rr/money_bot'>код открыт</a>.
+Свободно добавляйте в групповые чаты. Не собирает и не хранит переписку. [Открытый](https://github.com/m4rr/money_bot) исходный код.
 
-Подписывайтесь на мой канал <a href='https://t.me/CitoyenMarat'>@CitoyenMarat</a> и твиттер <a href='https://twitter.com/m4rr'>@m4rr</a>.
+Подписывайтесь на мой канал [@CitoyenMarat](https://t.me/CitoyenMarat) и твиттер [@m4rr](https://twitter.com/m4rr).
 
 © Марат Сайтаков.
 """
@@ -48,7 +48,7 @@ def parse_message message
   when :start
     result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: Keys, resize_keyboard: true, one_time_keyboard: false)
     result[:disable_web_page_preview] = true
-    result[:parse_mode] = 'HTML'
+    result[:parse_mode] = 'Markdown'
     result[:text] = Greet
   when :stop
     result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true)
