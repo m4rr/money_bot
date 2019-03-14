@@ -75,9 +75,9 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
         # usage statistics
 
         if chat_ids.key?(parameters[:chat_id]) 
-          chat_ids[parameters.chat_id] += 1
+          chat_ids[parameters[:chat_id]] += 1
         else
-          chat_ids[parameters.chat_id] = 1
+          chat_ids[parameters[:chat_id]] = 1
         end
 
         if Time.now.to_i - last_update.to_i > 30 * 60
