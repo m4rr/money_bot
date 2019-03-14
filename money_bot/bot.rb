@@ -81,14 +81,14 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
         end
 
         if Time.now.to_i - last_update.to_i > 30 * 60
+
           number_of_msgs_sent = 0
           chat_ids.each do |key, value|
             number_of_msgs_sent += value
           end
 
           bot.api.send_message({ chat_id: "@usdrubbotsupport",
-                                 text: chat_ids.size.to_s + " chats: " 
-                                     + number_of_msgs_sent.to_s + " msgs sent" })
+                                 text: chat_ids.size.to_s + " chats: " + number_of_msgs_sent.to_s + " msgs sent" })
           last_update = Time.now
           # number_of_msgs_sent = 0 # unexpected 0 shows restart
         end
