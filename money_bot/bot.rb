@@ -63,7 +63,17 @@ def parse_message message
 end
 
 chat_ids = {}
-last_update = Time.now
+last_update = nil
+
+def statistics_message
+  number_of_msgs_sent = 0
+  chat_ids.each do |key, value|
+    number_of_msgs_sent += value
+  end
+
+  { chat_id: "@usdrubbotsupport",
+    text: chat_ids.size.to_s + " chats: " + number_of_msgs_sent.to_s + " msgs sent" }
+end
 
 Telegram::Bot::Client.run(TOKEN) do |bot|
   bot.listen do |message|
@@ -80,17 +90,9 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
           chat_ids[parameters[:chat_id]] = 1
         end
 
-        if Time.now.to_i - last_update.to_i > 30 * 60
-
-          number_of_msgs_sent = 0
-          chat_ids.each do |key, value|
-            number_of_msgs_sent += value
-          end
-
-          bot.api.send_message({ chat_id: "@usdrubbotsupport",
-                                 text: chat_ids.size.to_s + " chats: " + number_of_msgs_sent.to_s + " msgs sent" })
+        if last_update.nil? || Time.now.to_i - last_update.to_i > 30 * 60
+          bot.api.send_message(statistics_message)
           last_update = Time.now
-          # number_of_msgs_sent = 0 # unexpected 0 shows restart
         end
       rescue => exception
         puts exception
