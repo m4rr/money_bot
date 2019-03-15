@@ -42,10 +42,6 @@ def parse_message message
 
   parsed = parse_text(message.text)
 
-  if parsed.kind_of?(Array)
-    parsed = parsed.first
-  end
-
   case parsed
   when :start
     result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: Keys, resize_keyboard: true, one_time_keyboard: false)
@@ -57,6 +53,18 @@ def parse_message message
     result[:text] = "Клавиатура убрана.\n\n* * *\n\nKeyboard has been removed."
     happy_bday = []
   else
+    if parsed.kind_of?(Array) && parsed.length <= 1
+      parsed = parsed.first
+    elsif parsed.kind_of?(Array)
+      text = parsed.reduce("") { |memo, obj|
+        memo = memo + "> " + obj[:origin][:amount] + obj[:origin][:unit] + " " + obj[:origin][:currency] + "\n"
+        + obj[:result] + "\n\n"
+      }
+      parsed = text
+    else 
+      #
+    end
+
     result[:text] = parsed if !parsed.nil?
   end
 

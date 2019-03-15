@@ -119,12 +119,10 @@ def convert_values hash
 
   to_currency = pretty_currency(to_currency)
 
-  "#{group_by_3 result} #{to_currency}"
+  { result: "#{group_by_3 result} #{to_currency}", origin: hash }
 end
 
 def parse_text text
-  rex = /-?(s?[$€£₽฿])?(\d+[ \d.,]*)(mm(?!\w)|m(?!\w)|k(?!\w)|к|тыщ|тыс[а-я]{0,4}|млн|лям[а-я]{0,2}|миллион[а-я]{0,2}|млрд|миллиард[а-я]{0,2})? ?(s?[$€£₽฿]|dollar|доллар|бакс|евро|фунт|руб|бат|тенге|рингг?ит|канадск[а-я]{0,2} доллар|сингапурск[а-я]{0,2} доллар|[a-zA-Z]{3})?/i
-
   case text
   when '/start'
     :start
@@ -139,7 +137,7 @@ def parse_text text
     if values.length == 0 
       nil
     elsif values.length == 1
-      convert_values(values.first)
+      convert_values(values.first)[:result]
     else
       values.collect { |x|
         convert_values(x)
