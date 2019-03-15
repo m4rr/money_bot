@@ -4,7 +4,7 @@ Regex = /-?(s?[$€£₽฿])?(\d+[ \d.,]*)(mm(?!\w)|m(?!\w)|k(?!\w)|к|тыщ|�
 
 def global_scan text 
   text
-    .sub(" ", " ") # nbsp replace
+    .gsub("\u00A0", " ") # nbsp replace
     .scan(Regex)
     .collect { |match|
       cur = match[0] || match[3]
