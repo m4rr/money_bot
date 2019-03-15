@@ -37,6 +37,10 @@ Greet = """
 # Freely add her to group chats. Doesn’t collect and/or store converstaions. Uses Open Exchange Rates. <a href='https://github.com/m4rr/money_bot'>Open source</a>.
 # Author: Marat Saytakov. Join my channel <a href='https://t.me/CitoyenMarat'>@CitoyenMarat</a> and twitter <a href='https://twitter.com/m4rr'>@m4rr</a>.
 
+def max (a,b)
+  a>b ? a : b
+end
+
 def parse_message message
   result = { chat_id: message.chat.id }
 
@@ -53,22 +57,38 @@ def parse_message message
     result[:text] = "Клавиатура убрана.\n\n* * *\n\nKeyboard has been removed."
     happy_bday = []
   else
-    if parsed.kind_of?(Array) && parsed.length <= 1
-      parsed = parsed.first
+    if parsed.nil? || parsed.empty?
+      #
+
+    elsif parsed.kind_of?(Array) && parsed.length == 1
+      result[:text] = parsed.first
+
     elsif parsed.kind_of?(Array)
-      text = parsed.reduce("") { |memo, obj|
+      origin_max_len = 0
+      result_max_len = 0
+      
+      parsed.each { |temp_obj| 
+        unit = temp_obj[:origin][:unit]
+        unit = "" if temp_obj[:origin][:unit].nil?
+        origin = temp_obj[:origin][:amount] + unit + " " + temp_obj[:origin][:currency]
+
+        origin_max_len = max(origin_max_len, origin.length)
+        result_max_len = max(result_max_len, temp_obj[:result].length)
+      }
+
+      multi_text = parsed.reduce("") { |memo, obj|
         unit = obj[:origin][:unit]
         unit = "" if obj[:origin][:unit].nil?
+        origin = obj[:origin][:amount] + unit + " " + obj[:origin][:currency]
         
-        memo = memo + "> " + obj[:origin][:amount] + obj[:origin][:unit] + " " + obj[:origin][:currency] + "\n"
-        + obj[:result] + "\n\n"
+        memo + "`" + origin.rjust(origin_max_len) + " = " + obj[:result].rjust(result_max_len) + "`\n"
       }
-      parsed = text
-    else 
-      #
-    end
 
-    result[:text] = parsed if !parsed.nil?
+      result[:parse_mode] = 'Markdown'
+      result[:text] = multi_text
+    else 
+      result[:text] = parsed
+    end
   end
 
   # respond with reply if timeout
@@ -92,9 +112,11 @@ end
 
 Telegram::Bot::Client.run(TOKEN) do |bot|
   bot.listen do |message|
-    parameters = parse_message(message)
-    if !parameters.nil? && !parameters.empty?
-      begin
+    
+    begin
+      parameters = parse_message(message)
+
+      if !parameters.nil? && !parameters.empty?
         bot.api.send_message(parameters)
       
         # usage statistics
@@ -106,13 +128,14 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
         end
 
         if last_update.nil? || Time.now.to_i - last_update.to_i > 30 * 60
-          bot.api.send_message(statistics_message)
-          last_update = Time.now
+          bot.api.send_message(statistics_message) if !last_update.nil?
+          last_update = Time.now 
         end
-      rescue => exception
-        puts exception
-        bot.api.send_message({ chat_id: "@usdrubbotsupport", text: exception.to_s })
       end
-    end
-  end
-end
+    rescue => e
+      puts e.full_message
+      bot.api.send_message({ chat_id: "@usdrubbotsupport", text: e.full_message(highlight: false) })
+    end # begin
+
+  end # listen
+end # run

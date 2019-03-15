@@ -102,6 +102,8 @@ def convert_values hash
   return nil if rate == 0
 
   amount = parse_amount(hash[:amount], hash[:unit])
+  raise ArgumentError, "value is too big", hash.to_s if amount.to_i.to_s.length > 31 # skip overflow
+
   result = from_currency == :RUB ? (amount / rate) : (amount * rate)
   return nil if !result.finite?
 
@@ -135,17 +137,17 @@ def parse_text text
     if text.nil?
       return nil
     end
-    
-    values = global_scan(text)
 
-    if values.length == 0 
+    values = global_scan(text)
+    result = values.collect { |x| convert_values(x) }.compact
+
+    if result.empty?
       nil
-    elsif values.length == 1
-      convert_values(values.first)[:result]
+    elsif result.length == 1
+      puts result.first.class
+      result.first[:result]
     else
-      values.collect { |x|
-        convert_values(x)
-      }
+      result
     end
   end
 end
