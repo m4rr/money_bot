@@ -8,6 +8,7 @@ $stdout.sync = true
 path = File.expand_path(File.dirname(__FILE__))
 load "#{path}/token.rb"
 load "#{path}/parser.rb"
+load "#{path}/stat.rb"
 
 # check open exchange rates or return cached
 def usd_base_json
@@ -21,10 +22,6 @@ def usd_base_json
   @json_storage
 end
 
-Keys = [['100 рублей', '1000 rubles', '5000 ₽'],
-        ['1 dollar', '$100', '$500', '$1000'  ],
-        ['1 euro', '100 €', '500 €',  '1000 €'],]
-
 Greet = """
 Напишите “`$10k`” или что-то вроде «`Я выиграл 100 000 рублей в конкурсе`» — и бот ответит на такое сообщения, где указана сумма и валюта.
 
@@ -33,105 +30,61 @@ Greet = """
 Подписывайтесь на мой канал @CitoyenMarat и твиттер [@m4rr](https://twitter.com/m4rr).
 """
 
-
-def max (a,b)
-  a>b ? a : b
-end
-
-def parse_message message
-  result = { chat_id: message.chat.id }
-
-  parsed = parse_text(message.text)
-
-  case parsed
-  when :start
-    result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: Keys, resize_keyboard: true, one_time_keyboard: false)
-    result[:disable_web_page_preview] = true
-    result[:parse_mode] = 'Markdown'
-    result[:text] = Greet
-  when :stop
-    result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true)
-    result[:text] = "Клавиатура убрана.\n\n* * *\n\nKeyboard has been removed."
-    happy_bday = []
-  else
-    if parsed.nil? || parsed.empty?
-      #
-
-    elsif parsed.kind_of?(Array) && parsed.length == 1
-      result[:text] = parsed.first
-
-    elsif parsed.kind_of?(Array)
-      origin_max_len = 0
-      result_max_len = 0
-      
-      parsed.each { |temp_obj| 
-        unit = temp_obj[:origin][:unit]
-        unit = "" if temp_obj[:origin][:unit].nil?
-        origin = temp_obj[:origin][:amount] + unit + " " + temp_obj[:origin][:currency]
-
-        origin_max_len = max(origin_max_len, origin.length)
-        result_max_len = max(result_max_len, temp_obj[:result].length)
-      }
-
-      multi_text = parsed.reduce("") { |memo, obj|
-        unit = obj[:origin][:unit]
-        unit = "" if obj[:origin][:unit].nil?
-        origin = obj[:origin][:amount] + unit + " " + obj[:origin][:currency]
-        
-        memo + "`" + origin.rjust(origin_max_len) + " = " + obj[:result].rjust(result_max_len) + "`\n"
-      }
-
-      result[:parse_mode] = 'Markdown'
-      result[:text] = multi_text
-    else 
-      result[:text] = parsed
-    end
-  end
-
-  # respond with reply if timeout
-  result[:reply_to_message_id] = message.message_id if Time.now.to_i - message.date >= 30
-
-  result if !result[:text].nil?
-end
-
-@chat_ids = {}
-last_update = nil
-
-def statistics_message
-  number_of_msgs_sent = 0
-  @chat_ids.each do |key, value|
-    number_of_msgs_sent += value
-  end
-  
-  { chat_id: "@usdrubbotsupport",
-    text: @chat_ids.size.to_s + " chats: " + number_of_msgs_sent.to_s + " msgs sent" }
-end
+Keys = [['100 рублей', '1000 rubles', '5000 ₽'],
+        ['1 dollar', '$100', '$500', '$1000'  ],
+        ['1 euro', '100 €', '500 €',  '1000 €'],]
 
 Telegram::Bot::Client.run(TOKEN) do |bot|
   bot.listen do |message|
     
     begin
-      parameters = parse_message(message)
+      result = { chat_id: message.chat.id }
+      result[:parse_mode] = 'Markdown'
 
-      if !parameters.nil? && !parameters.empty?
-        bot.api.send_message(parameters)
+      case message.text
+      when '/start'
+        result[:text] = Greet
+        result[:disable_web_page_preview] = true
+        result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardMarkup.new(
+          keyboard: Keys, resize_keyboard: true, one_time_keyboard: false)
+
+        bot.api.send_message(result)
+        bot.api.send_message(support_msg("new user 🚀 (" + message.from.language_code + ")"))
+
+      when '/stop'
+        result[:text] = "Клавиатура убрана."
+        result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true)
+    
+        bot.api.send_message(result)
+
+      when /гугол/i && message.chat.id == -280573945
+        result[:text] = 'Ираклий, ну хватит!'
+
+        bot.api.send_message(result)
+
+      else
+        parsed_message = parse_message(message.text)
+
+        if parsed_message.nil?
+          next
+        end
+        
+        result[:text] = parsed_message
+
+        # respond with reply if timeout
+        result[:reply_to_message_id] = message.message_id if Time.now.to_i - message.date >= 30
+
+        bot.api.send_message(result)
       
         # usage statistics
+        stat_msg = chat_id_inc(message.chat.id)
+        bot.api.send_message(support_msg(stat_msg)) if !stat_msg.nil?
 
-        if @chat_ids.key?(parameters[:chat_id]) 
-          @chat_ids[parameters[:chat_id]] += 1
-        else
-          @chat_ids[parameters[:chat_id]] = 1
-        end
+      end # case else
 
-        if last_update.nil? || Time.now.to_i - last_update.to_i > 30 * 60
-          bot.api.send_message(statistics_message) if !last_update.nil?
-          last_update = Time.now 
-        end
-      end
     rescue => e
       puts e.full_message
-      bot.api.send_message({ chat_id: "@usdrubbotsupport", text: e.full_message(highlight: false) })
+      bot.api.send_message(support_msg(e.full_message(highlight: false)))
     end # begin
 
   end # listen

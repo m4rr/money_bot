@@ -124,30 +124,53 @@ def convert_values hash
   { result: "#{group_by_3 result} #{to_currency}", origin: hash }
 end
 
-def parse_text text
-  case text
-  when '/start'
-    :start
-  when '/stop'
-    :stop
-  when /гугол/i
-    'Ираклий, ну хватит!'
-  # https://regexr.com/3uar8
-  else
-    if text.nil?
-      return nil
-    end
-
-    values = global_scan(text)
-    result = values.collect { |x| convert_values(x) }.compact
-
-    if result.empty?
-      nil
-    elsif result.length == 1
-      puts result.first.class
-      result.first[:result]
-    else
-      result
-    end
+def parse_text_global text
+  if text.nil?
+    return nil
   end
+
+  global_scan(text)
+    .collect { |x| convert_values(x) }
+    .compact
+end
+
+def max (a, b)
+  a > b ? a : b
+end
+
+def parse_message message_text
+  parsed = parse_text_global(message_text)
+
+  if parsed.nil? || parsed.empty?
+    nil
+
+  elsif parsed.length == 1
+    parsed.first[:result]
+
+  else
+    origin_max_len = 0
+    result_max_len = 0
+    
+    parsed.each { |temp_obj| 
+      unit = temp_obj[:origin][:unit] || ""
+      origin = temp_obj[:origin][:amount] + unit + " " + temp_obj[:origin][:currency]
+
+      origin_max_len = max(origin_max_len, origin.length)
+      result_max_len = max(result_max_len, temp_obj[:result].length)
+    }
+
+    multi_text = parsed.reduce("") { |memo, obj|
+      unit = obj[:origin][:unit] || ""
+      origin = obj[:origin][:amount] + unit + " " + obj[:origin][:currency]
+      
+      memo + "`" + origin.rjust(origin_max_len) + " = " + obj[:result].rjust(result_max_len) + "`\n"
+    }
+
+    multi_text
+  end
+end
+
+def parse_text text
+  # legacy shortcut for tests
+  parse_text_global(text).first[:result]
 end
