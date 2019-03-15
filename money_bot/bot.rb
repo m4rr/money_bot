@@ -134,7 +134,7 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
       end
     rescue => e
       puts e.full_message
-      bot.api.send_message({ chat_id: "@usdrubbotsupport", text: e.full_message(highlight: false) })
+      bot.api.send_message({ chat_id: "@usdrubbotsupport", text: e.full_message }) # (highlight: false)
     end # begin
 
   end # listen
