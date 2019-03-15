@@ -117,6 +117,8 @@ def convert_values hash
     result = result.round
   end
 
+  to_currency = pretty_currency(to_currency)
+
   "#{group_by_3 result} #{to_currency}"
 end
 
