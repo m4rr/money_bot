@@ -57,6 +57,9 @@ def parse_message message
       parsed = parsed.first
     elsif parsed.kind_of?(Array)
       text = parsed.reduce("") { |memo, obj|
+        unit = obj[:origin][:unit]
+        unit = "" if obj[:origin][:unit].nil?
+        
         memo = memo + "> " + obj[:origin][:amount] + obj[:origin][:unit] + " " + obj[:origin][:currency] + "\n"
         + obj[:result] + "\n\n"
       }
