@@ -1,3 +1,6 @@
+path = File.expand_path(File.dirname(__FILE__))
+load "#{path}/regexg.rb"
+
 def handle_thousands_separtor value
   value.to_s.delete! ' _'
 
@@ -78,6 +81,17 @@ def group_by_3 number
   number.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1 ').reverse
 end
 
+def pretty_currency cur
+  case cur
+  when :RUB
+    "₽"
+  when :USD
+    "$"
+  else
+    cur
+  end
+end
+
 # convert values from given hash of `{ amount, unit, currency }`
 def convert_values hash
   from_currency = parse_currency(hash[:currency])
@@ -107,6 +121,8 @@ def convert_values hash
 end
 
 def parse_text text
+  rex = /-?(s?[$€£₽฿])?(\d+[ \d.,]*)(mm(?!\w)|m(?!\w)|k(?!\w)|к|тыщ|тыс[а-я]{0,4}|млн|лям[а-я]{0,2}|миллион[а-я]{0,2}|млрд|миллиард[а-я]{0,2})? ?(s?[$€£₽฿]|dollar|доллар|бакс|евро|фунт|руб|бат|тенге|рингг?ит|канадск[а-я]{0,2} доллар|сингапурск[а-я]{0,2} доллар|[a-zA-Z]{3})?/i
+
   case text
   when '/start'
     :start
@@ -115,7 +131,17 @@ def parse_text text
   when /гугол/i
     'Ираклий, ну хватит!'
   # https://regexr.com/3uar8
-  when /-?(s?[$€£₽฿])?(\d+[ \d.,]*)(mm(?!\w)|m(?!\w)|k(?!\w)|к|тыщ|тыс[а-я]{0,4}|млн|лям[а-я]{0,2}|миллион[а-я]{0,2}|млрд|миллиард[а-я]{0,2})? ?(s?[$€£₽฿]|dollar|доллар|бакс|евро|фунт|руб|бат|тенге|рингг?ит|канадск[а-я]{0,2} доллар|сингапурск[а-я]{0,2} доллар|[a-zA-Z]{3})?/i
-    convert_values({ amount: $2, unit: $3, currency: $1 || $4 })
+  else
+    values = global_scan(text)
+
+    if values.length == 0 
+      nil
+    elsif values.length == 1
+      convert_values(values.first)
+    else
+      values.collect { |x|
+        convert_values(x)
+      }
+    end
   end
 end

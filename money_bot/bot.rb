@@ -42,6 +42,10 @@ def parse_message message
 
   parsed = parse_text(message.text)
 
+  if parsed.kind_of?(Array)
+    parsed = parsed.first
+  end
+
   case parsed
   when :start
     result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: Keys, resize_keyboard: true, one_time_keyboard: false)
