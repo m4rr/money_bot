@@ -17,9 +17,9 @@ def parse_currency value
   case value.to_s.strip
   when /канадск/i
     :CAD
-  when /сингапурск|s$/i
+  when /сингапурск|s\$/i
     :SGD
-  when /$|dollar|доллар|бакс/i
+  when /\$|dollar|доллар|бакс/i
     :USD
   when /€|евро/i
     :EUR
