@@ -6,7 +6,7 @@ RUN echo 'gem: --no-rdoc --no-ri'>/etc/gemrc
 RUN apk add --update \
   ca-certificates \
   libstdc++ \
-  ruby=2.6.2 \
+  ruby>2.6.0 \
   ruby-json \
   ruby-bigdecimal \
   && rm -rf /var/cache/apk/*
