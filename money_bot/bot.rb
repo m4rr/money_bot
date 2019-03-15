@@ -70,7 +70,7 @@ def statistics_message
   @chat_ids.each do |key, value|
     number_of_msgs_sent += value
   end
-
+  
   { chat_id: "@usdrubbotsupport",
     text: @chat_ids.size.to_s + " chats: " + number_of_msgs_sent.to_s + " msgs sent" }
 end
