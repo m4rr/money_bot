@@ -172,5 +172,7 @@ end
 
 def parse_text text
   # legacy shortcut for tests
-  parse_text_global(text).first[:result]
+  res = parse_text_global(text).first
+  
+  res[:result] if !res.nil?
 end
