@@ -132,6 +132,10 @@ def parse_text text
     'Ираклий, ну хватит!'
   # https://regexr.com/3uar8
   else
+    if text.nil?
+      return nil
+    end
+    
     values = global_scan(text)
 
     if values.length == 0 
