@@ -222,6 +222,12 @@ def run_tests
   result &= parse_text("0.99 $").to_i < parse_text("$10 mm ").to_i
   puts("$10 mm ", result, "") if should_puts
 
+  result &= parse_text("s$1") != ""
+  result &= parse_text("s$1").to_i > 40
+  result &= parse_text("1 s$").to_i > 40
+  puts("s$1", result, parse_text("s$1")) if should_puts
+
+
   result
 end
 
