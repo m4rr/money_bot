@@ -87,8 +87,14 @@ def pretty_currency cur
     "₽"
   when :USD
     "$"
+  when :GBP
+    "£"
+  when :EUR
+     "€"
+  when :SGD
+    "S$"
   else
-    cur
+    cur.to_s
   end
 end
 
@@ -153,7 +159,8 @@ def parse_message message_text
     
     parsed.each { |temp_obj| 
       unit = temp_obj[:origin][:unit] || ""
-      origin = temp_obj[:origin][:amount] + unit + " " + temp_obj[:origin][:currency]
+      curr = pretty_currency(parse_currency(temp_obj[:origin][:currency]))
+      origin = temp_obj[:origin][:amount] + unit + " " + curr
 
       origin_max_len = max(origin_max_len, origin.length)
       result_max_len = max(result_max_len, temp_obj[:result].length)
@@ -161,7 +168,8 @@ def parse_message message_text
 
     multi_text = parsed.reduce("") { |memo, obj|
       unit = obj[:origin][:unit] || ""
-      origin = obj[:origin][:amount] + unit + " " + obj[:origin][:currency]
+      curr = pretty_currency(parse_currency(temp_obj[:origin][:currency]))
+      origin = obj[:origin][:amount] + unit + " " + curr
       
       memo + "`" + origin.rjust(origin_max_len) + " = " + obj[:result].rjust(result_max_len) + "`\n"
     }
