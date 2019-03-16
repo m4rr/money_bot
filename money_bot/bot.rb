@@ -34,7 +34,7 @@ Greet = """
 Если вам нравится, присылайте биткоины:
 """
 
-BTC_Wallet = "`3EfdG6DtxK29KoTvQffG2ZhRHCjcp1o8EX`"
+BTC_Wallet = "3EfdG6DtxK29KoTvQffG2ZhRHCjcp1o8EX"
 
 Keys = [['1 рубль', '100 ₽', '1 млн руб',],
         ['$1', '100 €', '£1k', '0,1 BTC',],
