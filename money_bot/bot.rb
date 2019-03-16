@@ -29,9 +29,10 @@ Greet = """
 
 ... и бот ответит на такое сообщение, где есть _сумма и валюта_. Это удобно в общих чатах. Ничего не собирает и не хранит. [Открытый код.](https://github.com/m4rr/money_bot)
 
-Бот бесплатный. Присылайте биткоины, если вам понравилось:
-`3EfdG6DtxK29KoTvQffG2ZhRHCjcp1o8EX`
+Бот бесплатный. Присылайте биткоины, если вам нравится:
 """
+
+BTC_Wallet = "`3EfdG6DtxK29KoTvQffG2ZhRHCjcp1o8EX`"
 
 Keys = [['100 рублей', '1000 rubles', '0,1 BTC'],
         ['1 dollar', '$100', '$500', '$10k' ],
@@ -52,6 +53,11 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
           keyboard: Keys, resize_keyboard: true, one_time_keyboard: false)
 
         bot.api.send_message(result)
+        
+        result[:text] = BTC_Wallet
+        result[:reply_markup] = nil
+        bot.api.send_message(result)
+
         bot.api.send_message(support_msg("new user 🚀 (" + (message.from.language_code || "") + ")"))
 
       when '/stop'
