@@ -28,55 +28,69 @@ Greet = """
 Если вам все нравится, присылайте биткоины:
 """
 
-BTC_Wallet = "3EfdG6DtxK29KoTvQffG2ZhRHCjcp1o8EX"
+Wallet = '3EfdG6DtxK29KoTvQffG2ZhRHCjcp1o8EX'
 
 Keys = [['1 рубль', '100 ₽', '1 млн руб',],
         ['$1', '100 €', '£1k', '0,1 BTC',],
         ['Я выиграл 10 000 баксов!'],]
 
+def start_reply chat_id
+  {
+    :chat_id => chat_id,
+    :text => Greet,
+    :parse_mode => 'Markdown',
+    :disable_web_page_preview => true,
+    :reply_markup => Telegram::Bot::Types::ReplyKeyboardMarkup.new(
+      keyboard: Keys, resize_keyboard: true, one_time_keyboard: false)
+  }
+end
+
+def wallet_reply chat_id
+  {
+    :chat_id => chat_id,
+    :text => Wallet
+  }
+end
+
+def stop_reply chat_id
+  {
+    :chat_id => chat_id,
+    :text => 'Клавиатура убрана',
+    :reply_markup => Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true)
+  }
+end
+
+def any_text_reply(chat_id, text)
+  parsed_message = parse_message(text)
+
+  if parsed_message.nil?
+    return nil
+  end
+  
+  { 
+    chat_id: chat_id,
+    text: parsed_message
+  }
+end
+
 Telegram::Bot::Client.run(TOKEN) do |bot|
   bot.listen do |message|
     
     begin
-      result = { chat_id: message.chat.id }
-      result[:parse_mode] = 'Markdown'
 
       case message.text
       when '/start'
-        result[:text] = Greet
-        result[:disable_web_page_preview] = true
-        result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardMarkup.new(
-          keyboard: Keys, resize_keyboard: true, one_time_keyboard: false)
-
-        bot.api.send_message(result)
-        
-        result[:text] = BTC_Wallet
-        result[:reply_markup] = nil
-        bot.api.send_message(result)
-
-        bot.api.send_message(support_msg("new user 🚀 (" + (message.from.language_code || "") + ")"))
+        bot.api.send_message(start_reply(message.chat.id))
+        bot.api.send_message(wallet_reply(message.chat.id))
+        bot.api.send_message(support_msg('New user! ' + (message.from.language_code || '')))
 
       when '/stop'
-        result[:text] = "Клавиатура убрана."
-        result[:reply_markup] = Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true)
-    
-        bot.api.send_message(result)
-
-      when /гугол/i && message.chat.id == -280573945
-        result[:text] = 'Ираклий, ну хватит!'
-
-        bot.api.send_message(result)
+        bot.api.send_message(stop_reply(message.chat.id))
 
       else
-        parsed_message = parse_message(message.text)
+        result = any_text_reply(message.chat.id, message.text)
 
-        if parsed_message.nil?
-          next
-        end
-        
-        result[:text] = parsed_message
-
-        # respond with reply if timeout
+        # respond with reply if timed out
         result[:reply_to_message_id] = message.message_id if Time.now.to_i - message.date >= 30
 
         bot.api.send_message(result)
@@ -84,12 +98,12 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
         # usage statistics
         stat_msg = chat_id_inc(message.chat.id)
         bot.api.send_message(support_msg(stat_msg)) if !stat_msg.nil?
-
       end # case else
 
     rescue => e
       puts e.full_message
       bot.api.send_message(support_msg(e.full_message(highlight: false)))
+
     end # begin
 
   end # listen
