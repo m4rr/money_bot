@@ -90,6 +90,10 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
       else
         result = any_text_reply(message.chat.id, message.text)
 
+        if result.nil?
+          next
+        end
+
         # respond with reply if timed out
         result[:reply_to_message_id] = message.message_id if Time.now.to_i - message.date >= 30
 
