@@ -73,7 +73,7 @@ def any_text_reply(chat_id, text)
   }
 end
 
-Telegram::Bot::Client.run(TOKEN) do |bot|
+Telegram::Bot::Client.run(BOT_TOKEN) do |bot|
   bot.listen do |message|
     
     begin

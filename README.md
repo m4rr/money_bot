@@ -13,7 +13,7 @@ Start chat with **[@USDRUB_bot](https://telegram.me/USDRUB_bot)** in Telegram. A
 In the folder:
 
 ```sh
-$ echo "TOKEN = 'YOUR_TOKEN'" >> money_bot/token.rb       # Telegram Bot Token from @BotFather
+$ echo "BOT_TOKEN = 'YOUR_TOKEN'" >> money_bot/token.rb       # Telegram Bot Token from @BotFather
 $ echo "OXR_APP_ID = 'YOUR_OXR_ID'" >> money_bot/token.rb # App token from Open Exchange Rates
 
 $ docker build -t m4rr/money_bot .                        # Build Docker image
