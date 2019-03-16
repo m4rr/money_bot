@@ -23,5 +23,5 @@ def chat_id_inc chat_id
 end
 
 def support_msg text
-  { chat_id: "@usdrubbotsupport", text: text }
+  { chat_id: "@usdrubbotsupport", text: text, disable_notification: true }
 end

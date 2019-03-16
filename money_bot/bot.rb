@@ -23,7 +23,7 @@ def usd_base_json
 end
 
 Greet = """
-Напишите боту, и он вам ответит, если увидит _валюту и сумму_. Например: `я выиграл 10 000 баксов в конкурсе Дурова!`
+Напишите боту, и он ответит вам, если увидит _валюту и сумму_. Например: `я выиграл 10 000 баксов в конкурсе Дурова!`
 
 Если вам все нравится, присылайте биткоины:
 """
@@ -36,27 +36,27 @@ Keys = [['1 рубль', '100 ₽', '1 млн руб',],
 
 def start_reply chat_id
   {
-    :chat_id => chat_id,
-    :text => Greet,
-    :parse_mode => 'Markdown',
-    :disable_web_page_preview => true,
-    :reply_markup => Telegram::Bot::Types::ReplyKeyboardMarkup.new(
+    chat_id: chat_id,
+    text: Greet,
+    parse_mode: 'Markdown',
+    disable_web_page_preview: true,
+    reply_markup: Telegram::Bot::Types::ReplyKeyboardMarkup.new(
       keyboard: Keys, resize_keyboard: true, one_time_keyboard: false)
   }
 end
 
 def wallet_reply chat_id
   {
-    :chat_id => chat_id,
-    :text => Wallet
+    chat_id: chat_id,
+    text: Wallet
   }
 end
 
 def stop_reply chat_id
   {
-    :chat_id => chat_id,
-    :text => 'Клавиатура убрана',
-    :reply_markup => Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true)
+    chat_id: chat_id,
+    text: 'Клавиатура убрана',
+    reply_markup: Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true)
   }
 end
 
@@ -69,7 +69,8 @@ def any_text_reply(chat_id, text)
   
   { 
     chat_id: chat_id,
-    text: parsed_message
+    text: parsed_message,
+    disable_notification: true
   }
 end
 
