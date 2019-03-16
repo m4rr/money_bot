@@ -35,8 +35,8 @@ Greet = """
 BTC_Wallet = "`3EfdG6DtxK29KoTvQffG2ZhRHCjcp1o8EX`"
 
 Keys = [['100 рублей', '1000 rubles', '0,1 BTC'],
-        ['1 dollar', '$100', '$500', '$10k' ],
-        ['1 euro', '1m €'],]
+        ['1 dollar', '$100', '100 €', '$10k' ],
+        ['Я выиграл 10 000 баксов!'],]
 
 Telegram::Bot::Client.run(TOKEN) do |bot|
   bot.listen do |message|
