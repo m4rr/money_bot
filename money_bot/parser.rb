@@ -47,6 +47,23 @@ def parse_currency value
   end
 end
 
+def pretty_currency cur
+  case cur
+  when :RUB
+    "₽"
+  when :USD
+    "$"
+  when :GBP
+    "£"
+  when :EUR
+     "€"
+  when :SGD
+    "S$"
+  else
+    cur.to_s
+  end
+end
+
 def parse_amount(value, unit)
   amount = handle_thousands_separtor value
 
@@ -79,23 +96,6 @@ end
 # 1000000 to 1 000 000
 def group_by_3 number
   number.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1 ').reverse
-end
-
-def pretty_currency cur
-  case cur
-  when :RUB
-    "₽"
-  when :USD
-    "$"
-  when :GBP
-    "£"
-  when :EUR
-     "€"
-  when :SGD
-    "S$"
-  else
-    cur.to_s
-  end
 end
 
 # convert values from given hash of `{ amount, unit, currency }`
