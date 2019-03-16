@@ -12,4 +12,5 @@ def global_scan text
       cur.nil? ? nil : { amount: match[1].strip, unit: match[2], currency: cur }
     }
     .compact
+    .uniq
 end
