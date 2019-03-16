@@ -168,7 +168,7 @@ def parse_message message_text
 
     multi_text = parsed.reduce("") { |memo, obj|
       unit = obj[:origin][:unit] || ""
-      curr = pretty_currency(parse_currency(temp_obj[:origin][:currency]))
+      curr = pretty_currency(parse_currency(obj[:origin][:currency]))
       origin = obj[:origin][:amount] + unit + " " + curr
       
       memo + "`" + origin.rjust(origin_max_len) + " = " + obj[:result].rjust(result_max_len) + "`\n"
