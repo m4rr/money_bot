@@ -69,8 +69,7 @@ def any_text_reply(chat_id, text)
   
   { 
     chat_id: chat_id,
-    text: parsed_message,
-    disable_notification: true
+    text: parsed_message
   }
 end
 
