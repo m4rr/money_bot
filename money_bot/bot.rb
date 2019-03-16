@@ -49,7 +49,7 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
           keyboard: Keys, resize_keyboard: true, one_time_keyboard: false)
 
         bot.api.send_message(result)
-        bot.api.send_message(support_msg("new user 🚀 (" + message.from.language_code + ")"))
+        bot.api.send_message(support_msg("new user 🚀 (" + (message.from.language_code || "") + ")"))
 
       when '/stop'
         result[:text] = "Клавиатура убрана."

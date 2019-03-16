@@ -51,9 +51,9 @@ def parse_amount(value, unit)
   amount = handle_thousands_separtor value
 
   case unit
-  when /mm|млрд|миллиард/i
+  when /mm|мм|млрд|миллиард/i
     amount *= 1_000_000_000
-  when /m|млн|лям|миллион/i
+  when /m|м|kk|кк|млн|лям|миллион/i
     amount *= 1_000_000
   when /k|к|тыщ|тыс/i
     amount *= 1_000
