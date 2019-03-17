@@ -69,7 +69,8 @@ def any_text_reply(chat_id, text)
   
   { 
     chat_id: chat_id,
-    text: parsed_message
+    text: parsed_message,
+    parse_mode: 'Markdown'
   }
 end
 
