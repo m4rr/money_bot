@@ -88,7 +88,7 @@ Telegram::Bot::Client.run(BOT_TOKEN) do |bot|
         bot.api.send_message(stop_reply(message.chat.id))
 
       else
-        result = any_text_reply(message.chat.id, message.text)
+        result = any_text_reply(message.chat.id, message.text || message.caption)
 
         if result.nil?
           next
