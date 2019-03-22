@@ -186,6 +186,9 @@ def run_tests
 
   # result &= parse_text("такси – это 19 вместо s$11 за автобус и 5 $").length == 2
   result &= parse_text("1 ляе").to_i < parse_text("$10 mm ").to_i
+
+  puts(parse_text("1 ляе"), parse_text("$10 mm ")) if should_puts
+
   result &= parse_text("1 тенге").to_i < parse_text("$10 mm ").to_i
   result &= parse_text("1 KZT").to_i < parse_text("$10 mm ").to_i
   result &= parse_text("1 KRW").to_i < parse_text("$10 mm ").to_i
@@ -230,8 +233,10 @@ def run_tests
   result &= parse_text("1 us$") == parse_text("us$1")
   result &= parse_text("1 s$") == parse_text("s$1")
   result &= parse_text("1 hk$") == parse_text("hk$1")
+
+  result &= parse_text("s$1") != parse_text("bs$1")
   
-  puts("s$1", result, parse_text("s$1")) if should_puts
+  puts(parse_text("s$1"), parse_text("bs$1")) if should_puts
 
   result
 end
