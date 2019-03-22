@@ -17,7 +17,7 @@ end
 
 def parse_currency value
   # match aliases
-  case value.to_s.strip
+  case value.to_s.strip.downcase
   when /канадск/i
     :CAD
   when "us$"
