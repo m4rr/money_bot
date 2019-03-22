@@ -7,12 +7,12 @@ def global_scan text
   text
     .gsub('\u00A0', ' ') # nbsp replace
     .scan(Regex)
-    .collect { |match|
+    .collect { |match| # map texts to structs
       cur = match[0] || match[3]
 
       cur.nil? ? nil : { amount: match[1].strip, unit: match[2], currency: cur }
-    }
-    .compact # remove nils
+    } 
+    .compact # flatmap (remove nils)
     .uniq # remove equal results
     .first(10)
 end
