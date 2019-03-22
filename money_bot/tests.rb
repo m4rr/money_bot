@@ -226,8 +226,12 @@ def run_tests
   result &= parse_text("s$1") != ""
   result &= parse_text("s$1").to_i > 40
   result &= parse_text("1 s$").to_i > 40
+  result &= parse_text("1 a$") == parse_text("a$1")
+  result &= parse_text("1 us$") == parse_text("us$1")
+  result &= parse_text("1 s$") == parse_text("s$1")
+  result &= parse_text("1 hk$") == parse_text("hk$1")
+  
   puts("s$1", result, parse_text("s$1")) if should_puts
-
 
   result
 end
