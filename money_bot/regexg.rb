@@ -63,7 +63,7 @@ def pretty_currency cur
   when :GBP
     "£"
   when :EUR
-     "€"
+    "€"
   when :SGD
     "S$"
   when :HKD
