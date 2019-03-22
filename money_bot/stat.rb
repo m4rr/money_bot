@@ -16,7 +16,7 @@ def chat_id_inc chat_id
       number_of_msgs_sent += value
     end
     
-    return @chat_ids.size.to_s + ' chats: ' + number_of_msgs_sent.to_s + ' msgs sent'
+    return @chat_ids.size.to_s + ' chats: ' + number_of_msgs_sent.to_s + ' msgs sent' if number_of_msgs_sent > 1
   end
 
   nil
