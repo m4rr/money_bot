@@ -1,11 +1,11 @@
 # https://regex101.com/r/ics2ad/3
 
-Symbols = "[a-zA-Z]{0,2}[$€£₽฿₪]"
+Symbols = '[a-zA-Z]{0,2}[$€£₽฿₪]'
 Regex = /-?(#{Symbols})?(\d+[ \d.,]*)(mm(?!\w)|m(?!\w)|k(?!\w)|к|тыщ[а-я]{0,2}|тыс[а-я]{0,4}|млн|лям[а-я]{0,2}|миллион[а-я]{0,2}|млрд|миллиард[а-я]{0,2})? ?(#{Symbols}|dollar|доллар|бакс|евро|фунт|руб|бат|тенге|рингг?ит|канадск[а-я]{0,2} доллар|сгд|сингапурск[а-я]{0,2} доллар|хкд|[a-zA-Z]{3})?/i
 
 def global_scan text 
   text
-    .gsub("\u00A0", " ") # nbsp replace
+    .gsub('\u00A0', ' ') # nbsp replace
     .scan(Regex)
     .collect { |match|
       cur = match[0] || match[3]
@@ -19,15 +19,15 @@ end
 def parse_currency value
   # match aliases
   case value.to_s.strip.downcase
-  when "a$"
+  when 'a$'
     :AUD
-  when "c$", /канадск/i
+  when 'c$', /канадск/i
     :CAD
-  when "hk$", "хкд"
+  when 'hk$', 'хкд'
     :HKD
-  when "s$", "сгд", /сингапурск/i
+  when 's$', 'сгд', /сингапурск/i
     :SGD
-  when "us$", "$", /dollar|доллар|бакс/i # other matches
+  when 'us$', '$', /dollar|доллар|бакс/i # other matches
     :USD
   when /€|евро/i
     :EUR
@@ -37,7 +37,7 @@ def parse_currency value
     :RUB
   when /฿|бат|BHT/i
     :THB
-  when "₪"
+  when '₪'
     :ILS
   when /тенге/i
     :KZT
@@ -57,19 +57,19 @@ end
 def pretty_currency cur
   case cur
   when :RUB
-    "₽"
+    '₽'
   when :USD
-    "$"
+    '$'
   when :GBP
-    "£"
+    '£'
   when :EUR
-    "€"
+    '€'
   when :SGD
-    "S$"
+    'S$'
   when :HKD
-    "HK$"
+    'HK$'
   when :ILS
-    "₪"
+    '₪'
   else
     cur.to_s
   end
