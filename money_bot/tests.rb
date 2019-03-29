@@ -236,7 +236,7 @@ def run_tests
 
   result &= parse_text("s$1") != parse_text("bs$1")
   
-  puts(parse_text("s$1"), parse_text("bs$1")) if should_puts
+  result &= parse_text("123.php") == nil
 
   result
 end
