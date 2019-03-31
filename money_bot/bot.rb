@@ -79,14 +79,25 @@ Telegram::Bot::Client.run(BOT_TOKEN) do |bot|
     
     begin
 
-      case message.text
-      when '/start'
+      if message.text == '/start'
         bot.api.send_message(start_reply(message.chat.id))
         bot.api.send_message(wallet_reply(message.chat.id))
         bot.api.send_message(support_msg('New user! ' + (message.from.language_code || '')))
 
-      when '/stop'
+      elsif message.text == '/stop'
         bot.api.send_message(stop_reply(message.chat.id))
+
+      # elsif message.reply_to_message != nil && message.reply_to_message.from.is_bot
+        # a reply with currency symbol to a bot's message 
+        # should send back a value converted from the message
+        # to the replied currency
+        #
+        # result = { 
+        #   chat_id: message.chat.id,
+        #   text: message.reply_to_message.text + " got it",
+        # }
+        #
+        # bot.api.send_message(result)
 
       else
         result = any_text_reply(message.chat.id, message.text || message.caption)
@@ -103,7 +114,8 @@ Telegram::Bot::Client.run(BOT_TOKEN) do |bot|
         # usage statistics
         stat_msg = chat_id_inc(message.chat.id)
         bot.api.send_message(support_msg(stat_msg)) if !stat_msg.nil?
-      end # case else
+
+      end # if else
 
     rescue => e
       puts e.full_message
