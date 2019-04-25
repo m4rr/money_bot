@@ -22,5 +22,5 @@ $ docker build -t m4rr/money_bot .                        # Build Docker image
 ### Start Up the Container
 
 ```sh
-$ docker run -d --restart=always m4rr/money_bot           # Run Docker container
+$ docker run -d --name money_bot --restart=always m4rr/money_bot           # Run Docker container
 ```
