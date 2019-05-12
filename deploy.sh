@@ -7,9 +7,9 @@ fi
 echo "tests succeeded"
 
 SECONDS=0
-ssh rails '
+ssh scw '
   echo SSH connecting...
-  cd ~/telegrambot/money_bot/
+  cd ~/money_bot/
   git pull
   docker stop money_bot
   docker rm money_bot
