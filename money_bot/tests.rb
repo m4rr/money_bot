@@ -235,9 +235,6 @@ def run_tests
   result &= parse_text("1 s$") == parse_text("s$1")
   result &= parse_text("1 hk$") == parse_text("hk$1")
 
-  puts(parse_text("¥2600"))
-  puts(parse_text("CNY1000"))
-
   result &= parse_text("s$1") != parse_text("bs$1")
   result &= parse_text("1k thb") < parse_text("2k thb")
   result &= parse_text("CNY1000") > parse_text("CNY900")
