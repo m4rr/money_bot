@@ -208,6 +208,7 @@ def run_tests
   result &= parse_text("1$") == parse_text("$1")
   puts("$1", result, "$1") if should_puts
   result &= parse_text("1k$") == parse_text("$1k")
+  puts("$1k", result, parse_text("1k$")) if should_puts
   puts("$1k", result, "") if should_puts
   result &= parse_text("5,0 руб") == parse_text("5.0 rub")
   puts("5.0 rub", result, "") if should_puts
@@ -234,8 +235,13 @@ def run_tests
   result &= parse_text("1 s$") == parse_text("s$1")
   result &= parse_text("1 hk$") == parse_text("hk$1")
 
+  puts(parse_text("¥2600"))
+  puts(parse_text("CNY1000"))
+
   result &= parse_text("s$1") != parse_text("bs$1")
-  
+  result &= parse_text("1k thb") < parse_text("2k thb")
+  result &= parse_text("CNY1000") > parse_text("CNY900")
+
   result &= parse_text("123.php") == nil
 
   result
