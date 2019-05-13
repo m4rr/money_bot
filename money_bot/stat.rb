@@ -8,7 +8,7 @@ def chat_id_inc chat_id
     @chat_ids[chat_id] = 1
   end
 
-  if Time.now.to_i - @last_update.to_i > 30 * 60
+  if Time.now.to_i - @last_update.to_i > 60 * 60 # run every 60+ minutes
     @last_update = Time.now 
 
     number_of_msgs_sent = 0

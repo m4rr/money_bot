@@ -82,7 +82,7 @@ Telegram::Bot::Client.run(BOT_TOKEN) do |bot|
       if message.text == '/start'
         bot.api.send_message(start_reply(message.chat.id))
         bot.api.send_message(wallet_reply(message.chat.id))
-        bot.api.send_message(support_msg('New user! ' + (message.from.language_code || '')))
+        bot.api.send_message(support_msg('#newuser @ ' + (message.from.language_code || '')))
 
       elsif message.text == '/stop'
         bot.api.send_message(stop_reply(message.chat.id))
