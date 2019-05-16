@@ -63,8 +63,6 @@ def convert_values hash
 
   return nil if !result.finite?
 
-  # puts to_currency
-
   if to_currency == :RUB && result < 10 || result < 1
     # round to .000 if valuable < 1
     result = result.round(3)
