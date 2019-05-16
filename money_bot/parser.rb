@@ -30,15 +30,10 @@ def parse_amount(value, unit)
   amount
 end
 
-def parse_rate from_currency
-  rate = usd_base_json['rates']['RUB'].to_f
+def parse_rate(from_cur, to_cur)
+  rate = usd_base_json['rates'][to_cur.to_s].to_f
+  usd_based_rate = usd_base_json['rates'][from_cur.to_s].to_f
 
-  if from_currency == :USD || from_currency == :RUB
-    return rate
-  end
-
-  # other currencies
-  usd_based_rate = usd_base_json['rates'][from_currency.to_s].to_f
   rate /= usd_based_rate
 
   rate
@@ -55,16 +50,20 @@ def convert_values hash
   return nil if from_currency == :not_expected
   return nil if from_currency == nil
 
-  rate = parse_rate from_currency
+  to_currency = parse_currency(hash[:to])
+  to_currency ||= from_currency == :RUB ? :USD : :RUB
+  
+  rate = parse_rate(from_currency, to_currency)
   return nil if rate == 0
 
   amount = parse_amount(hash[:amount], hash[:unit])
   raise ArgumentError, "value is too big", hash.to_s if amount.to_i.to_s.length > 31 # skip overflow
 
-  result = from_currency == :RUB ? (amount / rate) : (amount * rate)
+  result = amount * rate
+
   return nil if !result.finite?
 
-  to_currency = from_currency == :RUB ? :USD : :RUB
+  # puts to_currency
 
   if to_currency == :RUB && result < 10 || result < 1
     # round to .000 if valuable < 1

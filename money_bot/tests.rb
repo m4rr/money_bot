@@ -241,6 +241,8 @@ def run_tests
 
   result &= parse_text("123.php") == nil
 
+  result &= parse_text("1 m usd to eur") > parse_text("1 m EUR to USD")
+
   result
 end
 
