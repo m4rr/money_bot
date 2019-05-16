@@ -243,6 +243,10 @@ def run_tests
 
   result &= parse_text("1 m usd to eur") > parse_text("1 m EUR to USD")
 
+  result &= parse_text("hk$1 to THB") == parse_text("1 HKD to THB")
+
+  result &= parse_text("hk$1k to rub") == parse_text("1000 HKD")
+
   result
 end
 
