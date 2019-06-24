@@ -1,7 +1,7 @@
 # https://regex101.com/r/ics2ad/4
 
 Symbols = '[a-zA-Z]{3}|[a-zA-Z]{0,2}[$€£₽฿₪¥]'
-Regex = /-?(#{Symbols})?(\d[ .,\d]*(?!\w\w))(mm(?!\w)|m(?!\w)|k(?!\w)|к|тыщ[а-я]{0,2}|тыс[а-я]{0,4}|млн|лям[а-я]{0,2}|миллион[а-я]{0,2}|млрд|миллиард[а-я]{0,2})? ?(#{Symbols}|dollar|доллар|бакс|евро|фунт|руб|бат|тенге|рингг?ит|канадск[а-я]{0,2} доллар|сгд|сингапурск[а-я]{0,2} доллар|хкд|[a-zA-Z]{3})? ?(to ([a-zA-Z]{3}))?/i
+Regex = /-?(#{Symbols})?(\d[ .,\d]*(?!\w\w))(mm(?!\w)|m(?!\w)|k(?!\w)|к|тыщ[а-я]{0,2}|тыс[а-я]{0,4}|млн|лям[а-я]{0,2}|миллион[а-я]{0,2}|млрд|миллиард[а-я]{0,2})? ?(#{Symbols}|dollar|доллар|бакс|евро|фунт|руб|бат|тенге|рингг?ит|канадск[а-я]{0,2} доллар|сгд|сингапурск[а-я]{0,2} доллар|хкд|гривн|грн|лари|[a-zA-Z]{3})? ?(to ([a-zA-Z]{3}))?/i
 
 def global_scan text
   text
@@ -11,7 +11,7 @@ def global_scan text
       cur = match[0] || match[3]
 
       cur.nil? ? nil : { amount: match[1].strip, unit: match[2], currency: cur, to: match[5] }
-    } 
+    }
     .compact # flatmap (remove nils)
     .uniq # remove equal results
     .first(10)
@@ -46,6 +46,10 @@ def parse_currency value
     :KZT
   when /рингг?ит/i
     :MYR
+  when /₴|грн|гривн/i
+    :UAH
+  when /ლ|лари/i
+    :GEL
   else
     cur = value.to_s.strip.upcase
     if usd_base_json['rates'][cur].nil?
