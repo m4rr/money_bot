@@ -79,6 +79,8 @@ def pretty_currency cur
     'HK$'
   when :PLN
     'zł'
+  when :GEL
+    'ლ'
   else
     cur.to_s
   end
