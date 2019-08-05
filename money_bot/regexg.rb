@@ -50,6 +50,8 @@ def parse_currency value
     :UAH
   when /ლ|лари/i
     :GEL
+  when /злоты|zł/
+    :PLN
   else
     cur = value.to_s.strip.upcase
     if usd_base_json['rates'][cur].nil?
@@ -75,6 +77,8 @@ def pretty_currency cur
     'S$'
   when :HKD
     'HK$'
+  when :PLN
+    'zł'
   else
     cur.to_s
   end
