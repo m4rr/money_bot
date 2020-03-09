@@ -66,8 +66,8 @@ def any_text_reply(chat_id, text)
   if parsed_message.nil?
     return nil
   end
-  
-  { 
+
+  {
     chat_id: chat_id,
     text: parsed_message,
     parse_mode: 'Markdown'
@@ -76,7 +76,7 @@ end
 
 Telegram::Bot::Client.run(BOT_TOKEN) do |bot|
   bot.listen do |message|
-    
+
     begin
 
       if message.text == '/start'
@@ -88,11 +88,11 @@ Telegram::Bot::Client.run(BOT_TOKEN) do |bot|
         bot.api.send_message(stop_reply(message.chat.id))
 
       # elsif message.reply_to_message != nil && message.reply_to_message.from.is_bot
-        # a reply with currency symbol to a bot's message 
+        # a reply with currency symbol to a bot's message
         # should send back a value converted from the message
         # to the replied currency
         #
-        # result = { 
+        # result = {
         #   chat_id: message.chat.id,
         #   text: message.reply_to_message.text + " got it",
         # }
@@ -110,7 +110,7 @@ Telegram::Bot::Client.run(BOT_TOKEN) do |bot|
         result[:reply_to_message_id] = message.message_id if Time.now.to_i - message.date >= 30
 
         bot.api.send_message(result)
-      
+
         # usage statistics
         stat_msg = chat_id_inc(message.chat.id)
         bot.api.send_message(support_msg(stat_msg)) if !stat_msg.nil?
