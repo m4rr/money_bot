@@ -12,7 +12,7 @@ load "#{path}/stat.rb"
 
 # check open exchange rates or return cached
 def usd_base_json
-  if @last_fetch.nil? || Time.now.to_i - @last_fetch.to_i > 30 * 60
+  if @last_fetch.nil? || Time.now.to_i - @last_fetch.to_i > 5 * 60
     oxr_uri_latest = URI.parse("https://openexchangerates.org/api/latest.json?app_id=#{OXR_APP_ID}")
     oxr_response = Net::HTTP.get_response(oxr_uri_latest)
     @json_storage = JSON.parse(oxr_response.body)
